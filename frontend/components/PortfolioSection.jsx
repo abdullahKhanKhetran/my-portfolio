@@ -1,43 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
 import { projects } from "./portfolioData.js";
 
-export default function PortfolioSection() {
-  const sectionRef = useRef(null);
-  const titleRef = useRef(null);
-  const cardsRef = useRef([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry, index) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add("animate-scaleUp");
-            }, index * 150);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (titleRef.current) observer.observe(titleRef.current);
-    cardsRef.current.forEach((card) => {
-      if (card) observer.observe(card);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+export default function PortfolioSection({ motionSigned = 0, motionDirection = 1 }) {
+  const contentShift = motionSigned * motionDirection * 10;
 
   return (
-    <section id="portfolio" className="py-20 px-4 bg-zinc-50 dark:bg-zinc-950">
-      <h2
-        ref={titleRef}
-        className="text-4xl md:text-5xl font-bold text-center mb-12 text-black dark:text-white opacity-0"
-        style={{ animationName: "fadeIn", animationDuration: "0.8s", animationFillMode: "both" }}
+    <section id="portfolio" className="py-20 px-4">
+      <div
+        style={{ transform: `translate3d(${contentShift}vw, 0, 0)` }}
+        className="will-change-transform"
       >
+      <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 text-black dark:text-white">
         Featured Projects
       </h2>
 
@@ -45,8 +20,7 @@ export default function PortfolioSection() {
         {projects.map((project, index) => (
           <div
             key={project.name}
-            ref={(el) => (cardsRef.current[index] = el)}
-            className="relative bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 flex flex-col items-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 opacity-0 cursor-pointer group overflow-hidden"
+            className="relative bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 flex flex-col items-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer group overflow-hidden"
           >
             <div className="absolute inset-0 z-0 opacity-30 blur-lg scale-110">
               <Image
@@ -97,6 +71,7 @@ export default function PortfolioSection() {
             )}
           </div>
         ))}
+      </div>
       </div>
     </section>
   );

@@ -1,34 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
-export default function ContactSection() {
-  const contactRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fadeIn");
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    if (contactRef.current) observer.observe(contactRef.current);
-    return () => observer.disconnect();
-  }, []);
+export default function ContactSection({ motionSigned = 0, motionDirection = -1 }) {
+  const contentShift = motionSigned * motionDirection * 9;
 
   return (
     <section
       id="contact"
-      className="py-20 px-4 bg-black dark:bg-white text-white dark:text-black"
+      className="py-20 px-4 text-white dark:text-black"
     >
       <div
-        ref={contactRef}
-        className="max-w-2xl mx-auto text-center opacity-0"
+        style={{ transform: `translate3d(${contentShift}vw, 0, 0)` }}
+        className="max-w-2xl mx-auto text-center will-change-transform"
       >
         <h2 className="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h2>
 

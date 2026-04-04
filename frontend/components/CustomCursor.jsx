@@ -43,11 +43,11 @@ export default function CustomCursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed w-12 h-12 border-2 border-black dark:border-white rounded-full pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2"
+        className="fixed w-12 h-12 border-2 border-white rounded-full pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
       />
       <div
         ref={dotRef}
-        className="fixed w-3 h-3 bg-black dark:bg-white rounded-full pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2"
+        className="fixed w-3 h-3 bg-white rounded-full pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
       />
     </>
   );

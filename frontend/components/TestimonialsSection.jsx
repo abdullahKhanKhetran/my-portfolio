@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ motionSigned = 0, motionDirection = 1 }) {
   const testimonials = [
     {
       name: "Tech Startup Founder",
@@ -24,37 +22,12 @@ export default function TestimonialsSection() {
     },
   ];
 
-  const cardsRef = useRef([]);
-  const titleRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry, index) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add("animate-fadeIn");
-            }, index * 150);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (titleRef.current) observer.observe(titleRef.current);
-    cardsRef.current.forEach((card) => {
-      if (card) observer.observe(card);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const contentShift = motionSigned * motionDirection * 10;
 
   return (
-    <section className="py-20 px-4 bg-zinc-50 dark:bg-zinc-950">
-      <h2
-        ref={titleRef}
-        className="text-4xl md:text-5xl font-bold text-center mb-16 text-black dark:text-white opacity-0"
-      >
+    <section className="py-20 px-4">
+      <div style={{ transform: `translate3d(${contentShift}vw, 0, 0)` }} className="will-change-transform">
+      <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-black dark:text-white">
         Testimonials
       </h2>
 
@@ -62,8 +35,7 @@ export default function TestimonialsSection() {
         {testimonials.map((testimonial, index) => (
           <div
             key={index}
-            ref={(el) => (cardsRef.current[index] = el)}
-            className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow duration-300 border-l-4 border-black dark:border-white opacity-0"
+            className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow duration-300 border-l-4 border-black dark:border-white"
           >
             <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-6 italic">
               "{testimonial.quote}"
@@ -85,6 +57,7 @@ export default function TestimonialsSection() {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </section>
   );

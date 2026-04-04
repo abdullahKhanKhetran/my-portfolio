@@ -18,6 +18,8 @@ export const metadata = {
   description: "Portfolio of Abdullah Khan, a software engineer building web, mobile, and desktop apps using Flutter, .NET, Next.js, React, FastAPI, Django, and DevOps.",
 };
 
+import GlobalBackground from "../components/GlobalBackground.jsx";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -26,11 +28,16 @@ export default function RootLayout({ children }) {
         <meta name="description" content="Portfolio of Abdullah Khan, a software engineer building web, mobile, and desktop apps using Flutter, .NET, Next.js, React, FastAPI, Django, and DevOps." />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased cursor-none`}
+        className="text-white min-h-screen"
       >
-        <CustomCursor />
+        <GlobalBackground />
+        <div style={{ height: '72px' }} aria-hidden className="md:block hidden" />
+        <div style={{ height: '96px' }} aria-hidden className="md:hidden block" />
         <Navbar />
-        {children}
+        <main className="w-full overflow-x-clip relative z-10">
+          {children}
+        </main>
+        <CustomCursor />
       </body>
     </html>
   );
