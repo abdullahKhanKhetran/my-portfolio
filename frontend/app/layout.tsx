@@ -5,6 +5,7 @@ import CustomCursor from "../components/CustomCursor";
 import Navbar from "../components/Navbar";
 import GlobalBackground from "../components/GlobalBackground";
 import PageTransitionWrapper from "../components/PageTransitionWrapper";
+import LoadingScreen from "../components/LoadingScreen";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`text-white min-h-screen ${spaceGrotesk.variable}`}>
+        <LoadingScreen />
         <GlobalBackground />
         <div style={{ height: "72px" }} aria-hidden className="md:block hidden" />
         <div style={{ height: "96px" }} aria-hidden className="md:hidden block" />

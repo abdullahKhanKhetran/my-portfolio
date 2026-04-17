@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -9,13 +9,21 @@ export default function CustomCursor() {
   const mouseY = useRef(0);
   const cursorX = useRef(0);
   const cursorY = useRef(0);
+  const [isTouch, setIsTouch] = useState(true);
 
   useEffect(() => {
+    setIsTouch(window.matchMedia("(hover: none)").matches);
+  }, []);
+
+  useEffect(() => {
+    if (isTouch) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.current = e.clientX;
       mouseY.current = e.clientY;
     };
 
+    let rafId: number;
     const animate = () => {
       cursorX.current += (mouseX.current - cursorX.current) * 0.15;
       cursorY.current += (mouseY.current - cursorY.current) * 0.15;
@@ -24,20 +32,24 @@ export default function CustomCursor() {
         cursorRef.current.style.left = cursorX.current + "px";
         cursorRef.current.style.top = cursorY.current + "px";
       }
-
       if (dotRef.current) {
         dotRef.current.style.left = mouseX.current + "px";
         dotRef.current.style.top = mouseY.current + "px";
       }
 
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    animate();
+    rafId = requestAnimationFrame(animate);
 
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(rafId);
+    };
+  }, [isTouch]);
+
+  if (isTouch) return null;
 
   return (
     <>

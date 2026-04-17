@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { memo, useState } from "react";
+import { motion } from "framer-motion";
 import { playSwish } from "../lib/sounds";
 
 interface Testimonial {
@@ -49,7 +49,7 @@ interface CardProps {
   onClick?: () => void;
 }
 
-function TestimonialCard({ t, offset, onClick }: CardProps) {
+const TestimonialCard = memo(function TestimonialCard({ t, offset, onClick }: CardProps) {
   const isCenter = offset === 0;
   return (
     <motion.div
@@ -175,7 +175,9 @@ function TestimonialCard({ t, offset, onClick }: CardProps) {
       </div>
     </motion.div>
   );
-}
+});
+
+const OFFSETS = [-1, 0, 1] as const;
 
 export default function TestimonialsSection({ isVisible = false }: { isVisible?: boolean }) {
   const [active, setActive] = useState(0);
@@ -188,8 +190,6 @@ export default function TestimonialsSection({ isVisible = false }: { isVisible?:
     playSwish();
     setActive((i) => (i + 1) % testimonials.length);
   };
-
-  const offsets = [-1, 0, 1];
 
   return (
     <section className="py-20 px-4">
@@ -211,7 +211,7 @@ export default function TestimonialsSection({ isVisible = false }: { isVisible?:
         {/* Carousel */}
         <div
           className="relative mx-auto"
-          style={{ height: 340, maxWidth: 900, perspective: "1200px" }}
+          style={{ height: 420, maxWidth: 900, perspective: "1200px" }}
         >
           <motion.div
             drag="x"
@@ -223,7 +223,7 @@ export default function TestimonialsSection({ isVisible = false }: { isVisible?:
             }}
             style={{ width: "100%", height: "100%", position: "relative" }}
           >
-            {offsets.map((offset) => {
+            {OFFSETS.map((offset) => {
               const idx = (active + offset + testimonials.length) % testimonials.length;
               return (
                 <TestimonialCard

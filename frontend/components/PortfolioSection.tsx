@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -36,7 +36,7 @@ interface CarouselCardProps {
   onClick?: () => void;
 }
 
-function CarouselCard({ project, glow, offset, onClick }: CarouselCardProps) {
+const CarouselCard = memo(function CarouselCard({ project, glow, offset, onClick }: CarouselCardProps) {
   const isCenter = offset === 0;
   const slug = getProjectSlug(project.name);
 
@@ -149,7 +149,7 @@ function CarouselCard({ project, glow, offset, onClick }: CarouselCardProps) {
       )}
     </motion.div>
   );
-}
+});
 
 /* ─── Main Section ─── */
 export default function PortfolioSection({ isVisible = false }: { isVisible?: boolean }) {
