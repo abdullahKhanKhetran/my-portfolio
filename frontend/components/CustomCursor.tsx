@@ -3,15 +3,15 @@
 import { useEffect, useRef } from "react";
 
 export default function CustomCursor() {
-  const cursorRef = useRef(null);
-  const dotRef = useRef(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
   const mouseX = useRef(0);
   const mouseY = useRef(0);
   const cursorX = useRef(0);
   const cursorY = useRef(0);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       mouseX.current = e.clientX;
       mouseY.current = e.clientY;
     };
