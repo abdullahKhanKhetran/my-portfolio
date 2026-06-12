@@ -159,12 +159,14 @@ export default function GlobalBackground() {
       if (timestamp - lastFrame < FRAME_INTERVAL) return;
       lastFrame = timestamp;
 
-      // Trail fade matches the theme; the rain itself stays matrix-green
+      // Trail fade matches the theme; the rain stays matrix-green in both,
+      // but light mode needs a much darker shade to read against a light bg
       ctx.fillStyle =
         themeRef.current === "dark" ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.06)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "rgba(0,255,70,1)";
+      ctx.fillStyle =
+        themeRef.current === "dark" ? "rgba(0,255,70,1)" : "rgba(0,80,30,1)";
       ctx.font = `${charSize}px monospace`;
 
       for (let i = 0; i < columns.length; i++) {

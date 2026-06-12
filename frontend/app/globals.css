@@ -8,7 +8,7 @@
   --foreground: #18181b;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --matrix-opacity: 0.09;
+  --matrix-opacity: 0.25;
   --card-bg: rgba(24, 24, 27, 0.04);
   --card-border: rgba(24, 24, 27, 0.1);
   --card-border-strong: rgba(24, 24, 27, 0.18);
@@ -29,6 +29,7 @@
   color-scheme: dark;
   --background: #0a0a0a;
   --foreground: #ededed;
+  --matrix-opacity: 0.09;
   --card-bg: rgba(255, 255, 255, 0.04);
   --card-border: rgba(255, 255, 255, 0.08);
   --card-border-strong: rgba(255, 255, 255, 0.12);
