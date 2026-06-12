@@ -12,9 +12,9 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "#home" },
   { label: "Projects", href: "#portfolio" },
   { label: "Skills", href: "#skills" },
-  { label: "Blog", href: "/blogs" },
   { label: "Testimonials", href: "#testimonials" },
   { label: "Contact", href: "#contact" },
+  { label: "Blog", href: "/blogs" },
 ];
 
 const HASH_ITEMS = NAV_ITEMS.filter((item) => item.href.startsWith("#"));
