@@ -46,7 +46,7 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
@@ -91,13 +91,13 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
           className="max-w-xl"
         >
           {/* Tag */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 mb-6">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-xs font-medium text-zinc-400 tracking-widest uppercase">Available for work</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-900/10 bg-zinc-900/5 dark:border-white/10 dark:bg-white/5 mb-6">
+            <span className="w-2 h-2 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
+            <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400 tracking-widest uppercase">Available for work</span>
           </div>
 
           <h2
-            className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-6 leading-tight"
             style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", letterSpacing: "-0.02em" }}
           >
             Let&apos;s Build
@@ -113,7 +113,7 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
             </span>
           </h2>
 
-          <p className="text-zinc-400 text-base sm:text-lg mb-10 leading-relaxed" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontWeight: 300 }}>
+          <p className="text-zinc-600 dark:text-zinc-400 text-base sm:text-lg mb-10 leading-relaxed" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontWeight: 300 }}>
             Got a project in mind? Let&apos;s connect and turn your idea into reality.
             I&apos;m always open to interesting work and collaborations.
           </p>
@@ -133,24 +133,24 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
                     ? {
                         padding: "12px 24px",
                         borderRadius: 12,
-                        background: "white",
-                        color: "black",
+                        background: "var(--btn-primary-bg)",
+                        color: "var(--btn-primary-fg)",
                         fontSize: "0.9rem",
                       }
                     : {
                         padding: "12px 20px",
                         borderRadius: 12,
-                        background: "rgba(255,255,255,0.06)",
-                        color: "rgba(255,255,255,0.8)",
-                        border: "1px solid rgba(255,255,255,0.1)",
+                        background: "var(--card-bg)",
+                        color: "var(--text-secondary)",
+                        border: "1px solid var(--card-border)",
                         fontSize: "0.9rem",
                       }
                 }
                 onMouseEnter={(e) => {
-                  if (!link.primary) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)";
+                  if (!link.primary) (e.currentTarget as HTMLElement).style.borderColor = "var(--card-border-strong)";
                 }}
                 onMouseLeave={(e) => {
-                  if (!link.primary) (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+                  if (!link.primary) (e.currentTarget as HTMLElement).style.borderColor = "var(--card-border)";
                 }}
               >
                 {link.icon}
@@ -160,14 +160,14 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
           </div>
 
           {/* Info */}
-          <div className="flex flex-wrap gap-6 text-sm text-zinc-500 mb-12">
+          <div className="flex flex-wrap gap-6 text-sm text-zinc-600 dark:text-zinc-500 mb-12">
             <span>📍 Pakistan</span>
             <span>✉️ abdullahkhitran2005@gmail.com</span>
           </div>
 
           {/* Footer */}
-          <div className="pt-6 border-t border-white/5">
-            <p className="text-xs text-zinc-600">
+          <div className="pt-6 border-t border-zinc-900/10 dark:border-white/5">
+            <p className="text-xs text-zinc-500 dark:text-zinc-600">
               © {currentYear} Abdullah Khan · Full Stack Developer · Built with Next.js
             </p>
           </div>

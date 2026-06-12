@@ -74,10 +74,10 @@ const TestimonialCard = memo(function TestimonialCard({ t, offset, onClick }: Ca
     >
       <div
         style={{
-          background: "rgba(255,255,255,0.04)",
+          background: "var(--card-bg)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          border: `1px solid rgba(255,255,255,${isCenter ? 0.12 : 0.06})`,
+          border: `1px solid var(${isCenter ? "--card-border-strong" : "--card-border"})`,
           borderRadius: 20,
           boxShadow: isCenter
             ? `0 0 60px 0 ${t.glow}35, 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)`
@@ -112,7 +112,7 @@ const TestimonialCard = memo(function TestimonialCard({ t, offset, onClick }: Ca
             fontWeight: 300,
             lineHeight: 1.85,
             letterSpacing: "-0.01em",
-            color: "rgba(255,255,255,0.85)",
+            color: "var(--text-secondary)",
             flex: 1,
           }}
         >
@@ -127,7 +127,7 @@ const TestimonialCard = memo(function TestimonialCard({ t, offset, onClick }: Ca
         </div>
 
         {/* Author */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", paddingTop: "0.5rem", borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", paddingTop: "0.5rem", borderTop: "1px solid var(--divider)" }}>
           <div
             style={{
               width: 40,
@@ -154,7 +154,7 @@ const TestimonialCard = memo(function TestimonialCard({ t, offset, onClick }: Ca
                 fontSize: "0.875rem",
                 letterSpacing: "0.04em",
                 textTransform: "uppercase",
-                color: "white",
+                color: "var(--text-strong)",
               }}
             >
               {t.name}
@@ -164,7 +164,7 @@ const TestimonialCard = memo(function TestimonialCard({ t, offset, onClick }: Ca
                 fontFamily: "var(--font-space-grotesk, sans-serif)",
                 fontWeight: 400,
                 fontSize: "0.75rem",
-                color: "rgba(255,255,255,0.45)",
+                color: "var(--text-muted)",
                 letterSpacing: "0.02em",
               }}
             >
@@ -199,7 +199,7 @@ export default function TestimonialsSection({ isVisible = false }: { isVisible?:
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
         <h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-white"
+          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-zinc-900 dark:text-white"
           style={{ fontFamily: "var(--font-space-grotesk, sans-serif)" }}
         >
           What People Say
@@ -241,7 +241,7 @@ export default function TestimonialsSection({ isVisible = false }: { isVisible?:
         <div className="flex items-center justify-center gap-6 mt-6">
           <button
             onClick={prev}
-            className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition-all duration-200 hover:scale-110"
+            className="w-10 h-10 rounded-full border border-zinc-900/20 text-zinc-900/50 hover:text-zinc-900 hover:border-zinc-900/50 dark:border-white/15 dark:text-white/60 dark:hover:text-white dark:hover:border-white/40 flex items-center justify-center transition-all duration-200 hover:scale-110"
             aria-label="Previous"
           >
             ←
@@ -256,7 +256,7 @@ export default function TestimonialsSection({ isVisible = false }: { isVisible?:
                   width: active === i ? 24 : 8,
                   height: 8,
                   borderRadius: 4,
-                  background: active === i ? testimonials[active].glow : "rgba(255,255,255,0.2)",
+                  background: active === i ? testimonials[active].glow : "var(--dot)",
                   border: "none",
                   transition: "all 0.3s ease",
                   cursor: "pointer",
@@ -268,7 +268,7 @@ export default function TestimonialsSection({ isVisible = false }: { isVisible?:
 
           <button
             onClick={next}
-            className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition-all duration-200 hover:scale-110"
+            className="w-10 h-10 rounded-full border border-zinc-900/20 text-zinc-900/50 hover:text-zinc-900 hover:border-zinc-900/50 dark:border-white/15 dark:text-white/60 dark:hover:text-white dark:hover:border-white/40 flex items-center justify-center transition-all duration-200 hover:scale-110"
             aria-label="Next"
           >
             →

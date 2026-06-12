@@ -43,10 +43,10 @@ const CarouselCard = memo(function CarouselCard({ project, glow, offset, onClick
   const inner = (
     <div
       style={{
-        background: "rgba(255,255,255,0.04)",
+        background: "var(--card-bg)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        border: `1px solid rgba(255,255,255,${isCenter ? 0.12 : 0.05})`,
+        border: `1px solid var(${isCenter ? "--card-border-strong" : "--card-border"})`,
         borderRadius: 20,
         boxShadow: isCenter
           ? `0 0 70px 0 ${glow}40, 0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)`
@@ -73,7 +73,7 @@ const CarouselCard = memo(function CarouselCard({ project, glow, offset, onClick
             height: 64,
             borderRadius: 14,
             overflow: "hidden",
-            background: "rgba(255,255,255,0.08)",
+            background: "var(--card-bg)",
             border: `1px solid ${glow}40`,
             flexShrink: 0,
             position: "relative",
@@ -86,12 +86,12 @@ const CarouselCard = memo(function CarouselCard({ project, glow, offset, onClick
           <p style={{ fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", color: glow, textTransform: "uppercase", marginBottom: 4 }}>
             {project.year}
           </p>
-          <h3 style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontSize: "1.35rem", fontWeight: 700, color: "white", lineHeight: 1.2 }}>
+          <h3 style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontSize: "1.35rem", fontWeight: 700, color: "var(--text-strong)", lineHeight: 1.2 }}>
             {project.name}
           </h3>
         </div>
 
-        <p style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, flex: 1 }}>
+        <p style={{ fontSize: "0.875rem", color: "var(--text-body)", lineHeight: 1.7, flex: 1 }}>
           {project.description}
         </p>
 
@@ -103,7 +103,7 @@ const CarouselCard = memo(function CarouselCard({ project, glow, offset, onClick
             </span>
           ))}
           {project.tech.length > 3 && (
-            <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.3)" }}>+{project.tech.length - 3}</span>
+            <span style={{ fontSize: "0.7rem", color: "var(--text-faint)" }}>+{project.tech.length - 3}</span>
           )}
         </div>
 
@@ -176,7 +176,7 @@ export default function PortfolioSection({ isVisible = false }: { isVisible?: bo
         <div className="flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto mb-12 gap-4">
           <div>
             <h2
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white"
               style={{ fontFamily: "var(--font-space-grotesk, sans-serif)" }}
             >
               Featured Projects
@@ -185,16 +185,16 @@ export default function PortfolioSection({ isVisible = false }: { isVisible?: bo
           </div>
 
           {/* View toggle */}
-          <div className="flex items-center gap-1 p-1 rounded-xl border border-white/10 bg-white/5">
+          <div className="flex items-center gap-1 p-1 rounded-xl border border-zinc-900/10 bg-zinc-900/5 dark:border-white/10 dark:bg-white/5">
             <button
               onClick={() => { playClick(); setView("carousel"); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${view === "carousel" ? "bg-white text-black" : "text-zinc-400 hover:text-white"}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${view === "carousel" ? "bg-zinc-900 text-white dark:bg-white dark:text-black" : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"}`}
             >
               Tiles
             </button>
             <button
               onClick={() => { playClick(); setView("grid"); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${view === "grid" ? "bg-white text-black" : "text-zinc-400 hover:text-white"}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${view === "grid" ? "bg-zinc-900 text-white dark:bg-white dark:text-black" : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"}`}
             >
               Grid
             </button>
@@ -237,7 +237,7 @@ export default function PortfolioSection({ isVisible = false }: { isVisible?: bo
             <div className="flex items-center justify-center gap-6 mt-8">
               <button
                 onClick={prev}
-                className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition-all duration-200 hover:scale-110"
+                className="w-10 h-10 rounded-full border border-zinc-900/20 text-zinc-900/50 hover:text-zinc-900 hover:border-zinc-900/50 dark:border-white/15 dark:text-white/60 dark:hover:text-white dark:hover:border-white/40 flex items-center justify-center transition-all duration-200 hover:scale-110"
               >
                 ←
               </button>
@@ -250,7 +250,7 @@ export default function PortfolioSection({ isVisible = false }: { isVisible?: bo
                       width: active === i ? 24 : 8,
                       height: 8,
                       borderRadius: 4,
-                      background: active === i ? PROJECT_GLOWS[active] : "rgba(255,255,255,0.2)",
+                      background: active === i ? PROJECT_GLOWS[active] : "var(--dot)",
                       border: "none",
                       transition: "all 0.3s ease",
                       cursor: "pointer",
@@ -260,7 +260,7 @@ export default function PortfolioSection({ isVisible = false }: { isVisible?: bo
               </div>
               <button
                 onClick={next}
-                className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition-all duration-200 hover:scale-110"
+                className="w-10 h-10 rounded-full border border-zinc-900/20 text-zinc-900/50 hover:text-zinc-900 hover:border-zinc-900/50 dark:border-white/15 dark:text-white/60 dark:hover:text-white dark:hover:border-white/40 flex items-center justify-center transition-all duration-200 hover:scale-110"
               >
                 →
               </button>
@@ -283,9 +283,9 @@ export default function PortfolioSection({ isVisible = false }: { isVisible?: bo
                   onClick={() => playClick()}
                   className="relative rounded-2xl overflow-hidden flex flex-col items-center group block"
                   style={{
-                    background: "rgba(255,255,255,0.04)",
+                    background: "var(--card-bg)",
                     backdropFilter: "blur(16px)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    border: "1px solid var(--card-border)",
                     padding: "1.75rem",
                     transition: "box-shadow 0.3s ease, transform 0.3s ease",
                   }}
@@ -304,7 +304,7 @@ export default function PortfolioSection({ isVisible = false }: { isVisible?: bo
                   </div>
 
                   <div className="relative z-10 w-full flex flex-col gap-3">
-                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-white/10 relative flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-zinc-900/10 dark:bg-white/10 relative flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                       <Image src={project.icon} alt={project.name} fill style={{ objectFit: "contain", padding: 8 }} />
                     </div>
 
@@ -312,10 +312,10 @@ export default function PortfolioSection({ isVisible = false }: { isVisible?: bo
                       <p style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", color: PROJECT_GLOWS[index], textTransform: "uppercase", marginBottom: 4 }}>
                         {project.year}
                       </p>
-                      <h3 className="text-xl font-bold text-white">{project.name}</h3>
+                      <h3 className="text-xl font-bold text-zinc-900 dark:text-white">{project.name}</h3>
                     </div>
 
-                    <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3">{project.description}</p>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-3">{project.description}</p>
 
                     <div className="flex flex-wrap gap-2">
                       {project.tech.slice(0, 3).map((tech) => (

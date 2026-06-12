@@ -9,7 +9,7 @@ function renderInline(text: string): ReactNode[] {
   return text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
-        <strong key={i} className="font-semibold text-white">
+        <strong key={i} className="font-semibold text-zinc-900 dark:text-white">
           {part.slice(2, -2)}
         </strong>
       );
@@ -18,7 +18,7 @@ function renderInline(text: string): ReactNode[] {
       return (
         <code
           key={i}
-          className="font-mono text-[0.85em] text-emerald-300 bg-white/5 border border-white/10 rounded-md px-1.5 py-0.5"
+          className="font-mono text-[0.85em] text-emerald-700 bg-zinc-900/5 border-zinc-900/10 dark:text-emerald-300 dark:bg-white/5 border dark:border-white/10 rounded-md px-1.5 py-0.5"
         >
           {part.slice(1, -1)}
         </code>
@@ -95,9 +95,9 @@ export default function BlogContent({ content }: { content: string }) {
             return (
               <h2
                 key={i}
-                className="font-display text-2xl sm:text-3xl font-bold text-white mt-14 mb-5 flex items-baseline gap-3"
+                className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mt-14 mb-5 flex items-baseline gap-3"
               >
-                <span className="font-mono text-emerald-400/70 text-lg sm:text-xl select-none">
+                <span className="font-mono text-emerald-600/80 dark:text-emerald-400/70 text-lg sm:text-xl select-none">
                   //
                 </span>
                 <span>{renderInline(block.text!)}</span>
@@ -107,7 +107,7 @@ export default function BlogContent({ content }: { content: string }) {
             return (
               <h3
                 key={i}
-                className="font-display text-xl sm:text-2xl font-semibold text-white mt-10 mb-4"
+                className="font-display text-xl sm:text-2xl font-semibold text-zinc-900 dark:text-white mt-10 mb-4"
               >
                 {renderInline(block.text!)}
               </h3>
@@ -116,7 +116,7 @@ export default function BlogContent({ content }: { content: string }) {
             return (
               <blockquote
                 key={i}
-                className="my-8 border-l-2 border-emerald-400/60 bg-emerald-400/[0.05] rounded-r-2xl px-5 sm:px-7 py-5 text-lg sm:text-xl text-zinc-100 leading-relaxed italic"
+                className="my-8 border-l-2 border-emerald-600/50 dark:border-emerald-400/60 bg-emerald-400/[0.07] dark:bg-emerald-400/[0.05] rounded-r-2xl px-5 sm:px-7 py-5 text-lg sm:text-xl text-zinc-800 dark:text-zinc-100 leading-relaxed italic"
               >
                 {renderInline(block.text!)}
               </blockquote>
@@ -125,8 +125,8 @@ export default function BlogContent({ content }: { content: string }) {
             return (
               <ul key={i} className="my-6 space-y-2.5">
                 {block.items!.map((item, j) => (
-                  <li key={j} className="flex gap-3 text-zinc-300/90 leading-relaxed">
-                    <span className="text-emerald-400/80 font-mono select-none mt-px">
+                  <li key={j} className="flex gap-3 text-zinc-700 dark:text-zinc-300/90 leading-relaxed">
+                    <span className="text-emerald-600/90 dark:text-emerald-400/80 font-mono select-none mt-px">
                       ▸
                     </span>
                     <span>{renderInline(item)}</span>
@@ -137,7 +137,7 @@ export default function BlogContent({ content }: { content: string }) {
           case "image":
             return (
               <figure key={i} className="my-10">
-                <div className="rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03]">
+                <div className="rounded-2xl overflow-hidden border border-zinc-900/10 bg-zinc-900/[0.03] dark:border-white/10 dark:bg-white/[0.03]">
                   <Image
                     src={block.src!}
                     alt={block.alt || ""}
@@ -156,7 +156,7 @@ export default function BlogContent({ content }: { content: string }) {
             );
           default:
             return (
-              <p key={i} className="my-5 text-zinc-300/90 text-base sm:text-lg leading-[1.85]">
+              <p key={i} className="my-5 text-zinc-700 dark:text-zinc-300/90 text-base sm:text-lg leading-[1.85]">
                 {renderInline(block.text!)}
               </p>
             );

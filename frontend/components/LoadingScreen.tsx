@@ -5,16 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { playClick } from "../lib/sounds";
 
 const BOOT_LINES = [
-  { text: "> booting portfolio.exe", tag: null, delay: 0 },
-  { text: "> loading [next.js]", tag: "OK", delay: 320 },
-  { text: "> loading [framer-motion]", tag: "OK", delay: 260 },
-  { text: "> loading [components]", tag: "OK", delay: 290 },
-  { text: "> calibrating matrix rain", tag: "OK", delay: 350 },
-  { text: "> launching interface", tag: "READY", delay: 400 },
+  { text: "> booting portfolio.exe", tag: null, delay: 120 },
+  { text: "> loading [core modules]", tag: "OK", delay: 110 },
+  { text: "> calibrating matrix rain", tag: "OK", delay: 130 },
+  { text: "> launching interface", tag: "READY", delay: 200 },
 ];
 
-const CHAR_DELAY = 32;
-const TAG_PAUSE = 180;
+const CHAR_DELAY = 16;
+const TAG_PAUSE = 80;
 
 interface LineState {
   text: string;
@@ -52,7 +50,7 @@ export default function LoadingScreen() {
     if (currentLine >= BOOT_LINES.length) {
       doneRef.current = true;
       setPhase("done");
-      setTimeout(() => setVisible(false), 900);
+      setTimeout(() => setVisible(false), 450);
       return;
     }
 
@@ -61,7 +59,7 @@ export default function LoadingScreen() {
     if (phase === "typing") {
       if (currentChar < line.text.length) {
         const t = setTimeout(() => {
-          playClick();
+          if (currentChar % 2 === 0) playClick();
           setLines((prev) => {
             const updated = [...prev];
             if (!updated[currentLine]) {
@@ -117,7 +115,7 @@ export default function LoadingScreen() {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           style={{
             position: "fixed",
             inset: 0,
@@ -189,7 +187,7 @@ export default function LoadingScreen() {
             </div>
 
             {/* Content */}
-            <div style={{ padding: "1.5rem", fontFamily: "monospace", minHeight: 220 }}>
+            <div style={{ padding: "1.5rem", fontFamily: "monospace", minHeight: 165 }}>
               {lines.map((line, i) => (
                 <div
                   key={i}

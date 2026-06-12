@@ -58,7 +58,7 @@ export default function SkillsSection({ isVisible = false }: { isVisible?: boole
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
         <h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-white"
+          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-zinc-900 dark:text-white"
           style={{ fontFamily: "var(--font-space-grotesk, sans-serif)" }}
         >
           Skills & Expertise
@@ -77,10 +77,10 @@ export default function SkillsSection({ isVisible = false }: { isVisible?: boole
               key={domain.title}
               variants={domainVariants}
               style={{
-                background: "rgba(255,255,255,0.04)",
+                background: "var(--card-bg)",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
-                border: `1px solid rgba(255,255,255,0.08)`,
+                border: `1px solid var(--card-border)`,
                 borderRadius: 20,
                 padding: "1.75rem",
                 position: "relative",
@@ -131,7 +131,7 @@ export default function SkillsSection({ isVisible = false }: { isVisible?: boole
                       fontFamily: "var(--font-space-grotesk, sans-serif)",
                       fontSize: "1.3rem",
                       fontWeight: 700,
-                      color: "white",
+                      color: "var(--text-strong)",
                       lineHeight: 1,
                       marginBottom: 3,
                     }}
@@ -158,7 +158,7 @@ export default function SkillsSection({ isVisible = false }: { isVisible?: boole
                       fontSize: "0.75rem",
                       fontWeight: 500,
                       background: `${domain.glow}12`,
-                      color: "rgba(255,255,255,0.75)",
+                      color: "var(--text-body)",
                       border: `1px solid ${domain.glow}25`,
                       letterSpacing: "0.02em",
                     }}

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import ThemeToggle from "./ThemeToggle";
 
 interface NavItem {
   label: string;
@@ -88,17 +89,20 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 w-full z-50 py-3 px-4 md:py-4 md:px-8 flex justify-center transition-all duration-300 ${
         isScrolled
-          ? "bg-black/80 dark:bg-black/60 backdrop-blur-md"
+          ? "bg-white/70 dark:bg-black/60 backdrop-blur-md"
           : "bg-transparent"
       }`}
     >
       <div className="absolute inset-0 -z-10 backdrop-blur-md" />
-      <div className="absolute left-1/2 top-full -translate-x-1/2 h-12 w-[min(88vw,68rem)] bg-black/45 dark:bg-white/20 blur-2xl pointer-events-none" />
-      <div className="absolute left-0 top-full h-14 w-full bg-gradient-to-b from-black/55 via-black/18 to-transparent dark:from-black/70 dark:via-black/20 dark:to-transparent pointer-events-none" />
+      <div className="absolute left-1/2 top-full -translate-x-1/2 h-12 w-[min(88vw,68rem)] bg-black/10 dark:bg-white/20 blur-2xl pointer-events-none" />
+      <div className="absolute left-0 top-full h-14 w-full bg-gradient-to-b from-black/10 via-black/[0.03] to-transparent dark:from-black/70 dark:via-black/20 dark:to-transparent pointer-events-none" />
+
+      {/* Theme toggle */}
+      <ThemeToggle className="absolute right-16 md:right-6 top-1/2 -translate-y-1/2 z-50" />
 
       {/* Mobile menu button */}
       <button
-        className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 p-2 text-white z-50"
+        className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 p-2 text-zinc-900 dark:text-white z-50"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         aria-label="Toggle menu"
       >
@@ -119,7 +123,7 @@ export default function Navbar() {
               className={`text-sm lg:text-lg font-normal transition-colors duration-200 px-3 py-1 rounded-full focus:outline-none ${
                 active === item.href
                   ? isContactActive
-                    ? "bg-white text-black shadow-sm"
+                    ? "bg-zinc-900 text-white dark:bg-white dark:text-black shadow-sm"
                     : "bg-black/10 dark:bg-white/10 text-black dark:text-white shadow-sm"
                   : "text-zinc-500 dark:text-zinc-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white"
               }`}
@@ -133,7 +137,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden absolute top-full left-0 w-full bg-black/95 dark:bg-black/90 backdrop-blur-lg transition-all duration-300 ${
+        className={`md:hidden absolute top-full left-0 w-full bg-white/95 dark:bg-black/90 backdrop-blur-lg transition-all duration-300 ${
           isMobileMenuOpen
             ? "opacity-100 visible"
             : "opacity-0 invisible pointer-events-none"
@@ -146,9 +150,9 @@ export default function Navbar() {
                 className={`text-base font-medium transition-colors duration-200 px-4 py-2 rounded-full focus:outline-none ${
                   active === item.href
                     ? isContactActive
-                      ? "bg-white text-black shadow-sm"
-                      : "bg-white/10 text-white"
-                    : "text-zinc-400 hover:text-white"
+                      ? "bg-zinc-900 text-white dark:bg-white dark:text-black shadow-sm"
+                      : "bg-zinc-900/10 text-zinc-900 dark:bg-white/10 dark:text-white"
+                    : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
                 }`}
                 onClick={() => {
                   handleClick(item.href);

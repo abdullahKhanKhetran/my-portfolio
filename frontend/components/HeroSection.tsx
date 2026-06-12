@@ -43,13 +43,13 @@ function TerminalWindow({ isVisible }: { isVisible: boolean }) {
           return updated;
         });
         setCurrentChar((c) => c + 1);
-      }, 38);
+      }, 24);
       return () => clearTimeout(t);
     } else {
       const t = setTimeout(() => {
         setCurrentLine((l) => l + 1);
         setCurrentChar(0);
-      }, 180);
+      }, 140);
       return () => clearTimeout(t);
     }
   }, [isVisible, currentLine, currentChar]);
@@ -118,16 +118,16 @@ export default function HeroSection({ isVisible = false }: HeroSectionProps) {
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="flex-1 flex flex-col items-start justify-center text-left z-10 order-2 md:order-1"
       >
-        <p className="text-xs sm:text-sm font-medium mb-3 text-green-400 uppercase tracking-widest font-mono">
+        <p className="text-xs sm:text-sm font-medium mb-3 text-green-600 dark:text-green-400 uppercase tracking-widest font-mono">
           &gt; Hello, world!
         </p>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-3 md:mb-4 text-white leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-3 md:mb-4 text-zinc-900 dark:text-white leading-tight">
           I&apos;m Abdullah
         </h1>
-        <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 md:mb-6 text-zinc-300">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 md:mb-6 text-zinc-700 dark:text-zinc-300">
           Full Stack Developer
         </h3>
-        <p className="max-w-lg text-sm sm:text-base text-zinc-400 mb-6 md:mb-8 leading-relaxed">
+        <p className="max-w-lg text-sm sm:text-base text-zinc-600 dark:text-zinc-400 mb-6 md:mb-8 leading-relaxed">
           I build web, mobile, and desktop applications with modern tech stacks.
           Specializing in Flutter, .NET, Next.js, React, FastAPI, and Django with
           DevOps expertise.
@@ -135,13 +135,13 @@ export default function HeroSection({ isVisible = false }: HeroSectionProps) {
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <a
             href="#portfolio"
-            className="px-6 sm:px-8 py-3 bg-white text-black font-semibold rounded-lg hover:bg-zinc-200 transition-all duration-300 text-center text-sm sm:text-base btn-hover"
+            className="px-6 sm:px-8 py-3 bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-200 font-semibold rounded-lg transition-all duration-300 text-center text-sm sm:text-base btn-hover"
           >
             See My Work
           </a>
           <a
             href="#contact"
-            className="px-6 sm:px-8 py-3 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-all duration-300 text-center text-sm sm:text-base btn-hover"
+            className="px-6 sm:px-8 py-3 border border-zinc-900/30 text-zinc-900 hover:bg-zinc-900/5 dark:border-white/30 dark:text-white dark:hover:bg-white/10 font-semibold rounded-lg transition-all duration-300 text-center text-sm sm:text-base btn-hover"
           >
             Get In Touch
           </a>

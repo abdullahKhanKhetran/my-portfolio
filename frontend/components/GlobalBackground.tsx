@@ -6,12 +6,20 @@ interface SectionColor {
   color: string;
 }
 
-const SECTION_COLORS: SectionColor[] = [
+const DARK_SECTION_COLORS: SectionColor[] = [
   { id: "home", color: "#0a0a0a" },
   { id: "portfolio", color: "#181c24" },
   { id: "skills", color: "#11181f" },
   { id: "testimonials", color: "#19141d" },
   { id: "contact", color: "#0d0d14" },
+];
+
+const LIGHT_SECTION_COLORS: SectionColor[] = [
+  { id: "home", color: "#f5f5f1" },
+  { id: "portfolio", color: "#e9edf4" },
+  { id: "skills", color: "#e9f2ee" },
+  { id: "testimonials", color: "#f2eaf3" },
+  { id: "contact", color: "#ecedf4" },
 ];
 
 function hexToRgb(hex: string): number[] {
@@ -50,11 +58,29 @@ function lerpColor(colorA: string, colorB: string, t: number): string {
 const CHARS = "01{}=>;#/<>[]()abcdefABCDEF".split("");
 
 export default function GlobalBackground() {
-  const [bgColor, setBgColor] = useState(SECTION_COLORS[0].color);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [bgColor, setBgColor] = useState(DARK_SECTION_COLORS[0].color);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
+  const themeRef = useRef<"dark" | "light">("dark");
+
+  // Track theme from <html class="dark"> + ThemeToggle's custom event
+  useEffect(() => {
+    const current = document.documentElement.classList.contains("dark") ? "dark" : "light";
+    setTheme(current);
+    themeRef.current = current;
+    const onTheme = (e: Event) => {
+      const next = (e as CustomEvent).detail as "dark" | "light";
+      setTheme(next);
+      themeRef.current = next;
+    };
+    window.addEventListener("themechange", onTheme);
+    return () => window.removeEventListener("themechange", onTheme);
+  }, []);
 
   useEffect(() => {
+    const SECTION_COLORS = theme === "dark" ? DARK_SECTION_COLORS : LIGHT_SECTION_COLORS;
+
     function onScroll() {
       const sections = SECTION_COLORS.map((s) => {
         const el = document.getElementById(s.id);
@@ -63,7 +89,11 @@ export default function GlobalBackground() {
         return { id: s.id, top: rect.top, height: rect.height };
       }).filter((s): s is { id: string; top: number; height: number } => s !== null);
 
-      if (sections.length === 0) return;
+      if (sections.length === 0) {
+        // No homepage sections (e.g. /blogs, /projects) — use the base color
+        setBgColor(SECTION_COLORS[0].color);
+        return;
+      }
 
       let idx = 0;
       for (let i = 0; i < sections.length - 1; ++i) {
@@ -101,7 +131,7 @@ export default function GlobalBackground() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [theme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -119,9 +149,19 @@ export default function GlobalBackground() {
       columns = Array(Math.floor(canvas.width / charSize)).fill(0);
     }
 
-    function draw() {
+    // ~24fps is plenty for the rain and keeps main-thread cost low
+    const FRAME_INTERVAL = 41;
+    let lastFrame = 0;
+
+    function draw(timestamp: number) {
+      rafRef.current = requestAnimationFrame(draw);
       if (!canvas || !ctx) return;
-      ctx.fillStyle = "rgba(0,0,0,0.04)";
+      if (timestamp - lastFrame < FRAME_INTERVAL) return;
+      lastFrame = timestamp;
+
+      // Trail fade matches the theme; the rain itself stays matrix-green
+      ctx.fillStyle =
+        themeRef.current === "dark" ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.06)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = "rgba(0,255,70,1)";
@@ -137,8 +177,6 @@ export default function GlobalBackground() {
           columns[i]++;
         }
       }
-
-      rafRef.current = requestAnimationFrame(draw);
     }
 
     function handleResize() {
@@ -147,13 +185,19 @@ export default function GlobalBackground() {
       init();
     }
 
+    // Reset accumulated trails when the theme flips so the old fade
+    // color doesn't linger as a veil over the new background
+    const onThemeChange = () => ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     init();
-    draw();
+    rafRef.current = requestAnimationFrame(draw);
     window.addEventListener("resize", handleResize);
+    window.addEventListener("themechange", onThemeChange);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("themechange", onThemeChange);
     };
   }, []);
 

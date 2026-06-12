@@ -42,8 +42,13 @@ export default function RootLayout({
           name="description"
           content="Portfolio of Abdullah Khan, a software engineer building web, mobile, and desktop apps using Flutter, .NET, Next.js, React, FastAPI, Django, and DevOps."
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(localStorage.getItem("theme")!=="light")document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})()`,
+          }}
+        />
       </head>
-      <body className={`text-white min-h-screen ${spaceGrotesk.variable}`}>
+      <body className={`min-h-screen ${spaceGrotesk.variable}`}>
         <LoadingScreen />
         <GlobalBackground />
         <div style={{ height: "72px" }} aria-hidden className="md:block hidden" />

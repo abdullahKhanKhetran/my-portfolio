@@ -11,7 +11,7 @@ const GLOW = "#34d399";
 
 export default function BlogDetail({ post }: { post: BlogPost }) {
   return (
-    <div className="min-h-screen text-white px-4 sm:px-6 lg:px-8 pt-10 pb-24">
+    <div className="min-h-screen text-zinc-900 dark:text-white px-4 sm:px-6 lg:px-8 pt-10 pb-24">
       <article className="max-w-3xl mx-auto">
         {/* Back link */}
         <motion.div
@@ -22,7 +22,7 @@ export default function BlogDetail({ post }: { post: BlogPost }) {
           <Link
             href="/blogs"
             onClick={() => playClick()}
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group font-mono text-sm"
+            className="inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors group font-mono text-sm"
           >
             <svg
               className="w-4 h-4 group-hover:-translate-x-1 transition-transform"
@@ -44,7 +44,7 @@ export default function BlogDetail({ post }: { post: BlogPost }) {
           className="mt-10 mb-10"
         >
           <div className="flex flex-wrap items-center gap-3 font-mono text-xs sm:text-sm tracking-wider mb-6">
-            <time dateTime={post.date} className="text-emerald-400">
+            <time dateTime={post.date} className="text-emerald-600 dark:text-emerald-400">
               {post.displayDate}
             </time>
             <span className="text-zinc-600">·</span>
@@ -54,7 +54,7 @@ export default function BlogDetail({ post }: { post: BlogPost }) {
           </div>
 
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6">
-            <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-700 via-teal-600 to-cyan-700 dark:from-emerald-300 dark:via-teal-200 dark:to-cyan-300 bg-clip-text text-transparent">
               {post.title}
             </span>
           </h1>
@@ -66,7 +66,7 @@ export default function BlogDetail({ post }: { post: BlogPost }) {
                 className="font-mono text-[0.7rem] px-3 py-1 rounded-full"
                 style={{
                   background: `${GLOW}14`,
-                  color: GLOW,
+                  color: "var(--accent-emerald)",
                   border: `1px solid ${GLOW}2e`,
                 }}
               >
@@ -114,18 +114,18 @@ export default function BlogDetail({ post }: { post: BlogPost }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-20 pt-10 border-t border-white/10"
+          className="mt-20 pt-10 border-t border-zinc-900/10 dark:border-white/10"
         >
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <p className="font-mono text-sm text-zinc-500">
-              <span className="text-emerald-400/80">$</span> thanks for reading
-              <span className="cursor-blink text-emerald-400">_</span>
+              <span className="text-emerald-600/90 dark:text-emerald-400/80">$</span> thanks for reading
+              <span className="cursor-blink text-emerald-600 dark:text-emerald-400">_</span>
             </p>
             <div className="flex gap-3">
               <Link
                 href="/blogs"
                 onClick={() => playClick()}
-                className="px-6 py-3 rounded-full border border-white/15 text-white text-sm font-semibold hover:bg-white/10 transition-all duration-300 hover:scale-105"
+                className="px-6 py-3 rounded-full border border-zinc-900/20 text-zinc-900 hover:bg-zinc-900/5 dark:border-white/15 dark:text-white dark:hover:bg-white/10 text-sm font-semibold transition-all duration-300 hover:scale-105"
               >
                 More posts
               </Link>

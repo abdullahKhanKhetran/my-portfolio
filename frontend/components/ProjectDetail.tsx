@@ -29,7 +29,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
 
   useEffect(() => {
     setParticles(
-      Array.from({ length: 12 }, () => ({
+      Array.from({ length: 6 }, () => ({
         left: `${Math.random() * 100}%`,
         top: `${Math.random() * 100}%`,
         delay: `${Math.random() * 5}s`,
@@ -39,12 +39,12 @@ export default function ProjectDetail({ project }: { project: Project }) {
   }, []);
 
   return (
-    <div className="min-h-screen text-white overflow-x-hidden">
+    <div className="min-h-screen text-zinc-900 dark:text-white overflow-x-hidden">
       {/* Floating particles */}
       {particles.map((p, i) => (
         <div
           key={i}
-          className="absolute w-1 h-1 bg-white/10 rounded-full animate-float pointer-events-none"
+          className="absolute w-1 h-1 bg-zinc-900/10 dark:bg-white/10 rounded-full animate-float pointer-events-none"
           style={{
             left: p.left,
             top: p.top,
@@ -55,11 +55,11 @@ export default function ProjectDetail({ project }: { project: Project }) {
       ))}
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-zinc-950/80 backdrop-blur-xl border-b border-white/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-900/5 dark:border-white/5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link
             href="/#portfolio"
-            className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
+            className="flex items-center gap-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors group"
           >
             <svg
               className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
@@ -92,23 +92,23 @@ export default function ProjectDetail({ project }: { project: Project }) {
             <div className="grid lg:grid-cols-2 gap-6 md:gap-12 lg:gap-20 items-center mb-20">
               {/* Text Content */}
               <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-zinc-400 mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/5 border-zinc-900/10 dark:bg-white/5 border dark:border-white/10 text-sm text-zinc-600 dark:text-zinc-400 mb-6">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   <span>{project.role}</span>
                 </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                  <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
                     {project.name}
                   </span>
                 </h1>
-                <p className="text-lg sm:text-xl text-zinc-300 leading-relaxed mb-8">
+                <p className="text-lg sm:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed mb-8">
                   {project.fullDescription}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-300 text-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105"
+                      className="px-4 py-2 rounded-xl bg-zinc-900/5 border-zinc-900/10 text-zinc-700 hover:bg-zinc-900/10 hover:border-zinc-900/20 dark:bg-white/5 border dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:border-white/20 text-sm transition-all duration-300 hover:scale-105"
                     >
                       {tech}
                     </span>
@@ -141,7 +141,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
             className="mb-20"
           >
             <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
                 Key Features
               </span>
             </h2>
@@ -153,7 +153,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                  className="group p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all duration-500 hover:-translate-y-2"
+                  className="group p-6 rounded-2xl bg-zinc-900/5 border-zinc-900/5 hover:bg-zinc-900/10 hover:border-zinc-900/10 dark:bg-white/5 border dark:border-white/5 dark:hover:bg-white/10 dark:hover:border-white/10 transition-all duration-500 hover:-translate-y-2"
                 >
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                     <svg
@@ -170,7 +170,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">{feature}</h3>
+                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-2">{feature}</h3>
                 </motion.div>
               ))}
             </div>
@@ -185,7 +185,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
             className="mb-20"
           >
             <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
-              <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-pink-600 to-rose-600 dark:from-pink-400 dark:to-rose-400 bg-clip-text text-transparent">
                 Gallery
               </span>
             </h2>
@@ -193,7 +193,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
               {project.screenshots.map((screenshot, index) => (
                 <div
                   key={index}
-                  className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-white/30 transition-all duration-500 hover:scale-[1.02]"
+                  className="group relative aspect-video rounded-2xl overflow-hidden border border-zinc-900/10 hover:border-zinc-900/30 dark:border-white/10 dark:hover:border-white/30 transition-all duration-500 hover:scale-[1.02]"
                 >
                   <Image
                     src={screenshot}
@@ -260,7 +260,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
               </a>
               <Link
                 href="/#contact"
-                className="px-8 py-4 rounded-full border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all duration-300 hover:scale-105"
+                className="px-8 py-4 rounded-full border-2 border-zinc-900/20 text-zinc-900 hover:bg-zinc-900/5 dark:border-white/20 dark:text-white dark:hover:bg-white/10 font-semibold transition-all duration-300 hover:scale-105"
               >
                 Get In Touch
               </Link>
@@ -270,7 +270,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 py-8 px-4">
+      <footer className="relative z-10 border-t border-zinc-900/10 dark:border-white/5 py-8 px-4">
         <div className="max-w-7xl mx-auto text-center text-zinc-500">
           <p>© {project.year} Abdullah Khan. All rights reserved.</p>
         </div>
