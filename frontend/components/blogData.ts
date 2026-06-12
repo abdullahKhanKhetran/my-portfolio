@@ -1,0 +1,196 @@
+const FABLE_DIR = "/blogs/Testing%20fable%205";
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string; // ISO, for <time> + sorting
+  displayDate: string;
+  readTime: string;
+  tags: string[];
+  cover: string;
+  content: string; // markdown subset rendered by BlogContent
+}
+
+export const blogPosts: BlogPost[] = [
+  {
+    slug: "testing-claude-fable-5-on-a-real-project",
+    title: "Testing Claude Fable 5 on a Real Project: ARIC",
+    excerpt:
+      "Benchmarks and greenfield demos measure raw generation. I wanted to know how Fable 5 behaves when dropped into an existing codebase with real constraints — so I let it loose on ARIC, my MCP-based agent project.",
+    date: "2026-06-12",
+    displayDate: "June 12, 2026",
+    readTime: "7 min read",
+    tags: ["AI", "Claude", "Agents", "MCP", "Dev Tools"],
+    cover: `${FABLE_DIR}/OIF.webp`,
+    content: `
+With the release of Claude Fable 5, most of the discussion online has revolved around benchmark-style comparisons and greenfield tasks. People are asking the model to build applications from scratch, generate novel solutions, and then comparing the results against Opus 4.8.
+
+While those tests are useful, I don't think they tell the whole story.
+
+Starting from a blank slate primarily measures raw generation capability, and the outcome can be heavily influenced by prompting style, temperature, sampling settings, and even the benchmark the model implicitly sets for itself. A model may produce a more ambitious result not because it is fundamentally more capable, but because it decided to explore a different direction.
+
+I was more interested in something practical:
+
+> How does Fable 5 perform when dropped into an existing software project with established architecture, constraints, technical debt, and a specific product vision?
+
+To answer that question, I tested it on ARIC, my MCP-based agent project.
+
+![ARIC — the Ambient Real-time Intelligence Companion that served as the testbed](${FABLE_DIR}/Screenshot%202026-06-12%20113329.png)
+
+## First Impressions: Understanding an Existing Codebase
+
+The first thing I tested was project comprehension.
+
+I gave the model access to the repository and asked a simple question:
+
+> "What is in this directory? Explain the workflows, features, and what you think the vision of the project is."
+
+Compared to Opus 4.8, the biggest improvement I noticed was speed.
+
+The overall quality of the analysis was similar, but Fable 5 reached useful conclusions significantly faster. It mapped the architecture, workflows, and project structure with fewer exploratory steps and appeared more efficient at navigating the codebase.
+
+![Fable 5's read on ARIC's vision after a single open-ended prompt](${FABLE_DIR}/Screenshot%202026-06-12%20100231.png)
+
+This wasn't necessarily a breakthrough in depth of understanding. Instead, it felt like faster convergence toward an accurate understanding of the project.
+
+For large repositories, that difference alone can have a noticeable impact on workflow.
+
+## Testing Planning and Architectural Reasoning
+
+After evaluating project understanding, I moved on to planning.
+
+The next phase of ARIC involves several substantial additions:
+
+* Multi-tool calling
+* Memory systems
+* Agent orchestration improvements
+* Better integration between MCP tools and external services
+
+Rather than giving the model a highly detailed specification, I intentionally used a fairly average prompt. My goal was to see whether it could identify missing information on its own and ask the right questions before producing a plan.
+
+This was one of the areas where Fable 5 impressed me.
+
+Before proposing a solution, it asked clarifying questions about:
+
+* MCP architecture choices
+* Memory layering strategies
+* Composio and Apify authentication requirements
+
+The questions were relevant and targeted the actual architectural bottlenecks of the project.
+
+Another interesting observation was its willingness to gather external context. Compared to Opus 4.8, Fable 5 seemed more inclined to research implementation approaches rather than relying entirely on internal reasoning. While this sometimes increased planning time slightly, I generally consider it a positive tradeoff if it improves the quality of the final recommendation.
+
+## The Conservative Nature of the Plan
+
+The resulting plan was technically solid, but it exposed one of the model's recurring characteristics.
+
+Fable 5 is conservative.
+
+Even though my prompts hinted toward a larger architectural leap, the model consistently stayed close to the current codebase and proposed incremental improvements rather than major redesigns.
+
+For example, it repeatedly avoided introducing heavier frameworks such as LangChain or LangGraph. Instead, it favored a custom event-loop-based approach that could be integrated directly into the existing architecture.
+
+There are two possible interpretations of this behavior.
+
+The first is that the model is intentionally optimizing for maintainability, implementation speed, and project success.
+
+The second is that it has a tendency to avoid large architectural commitments, even when they may be worth considering.
+
+My experience suggests the answer is probably a mixture of both.
+
+Even after additional prompting, it remained biased toward practical, lower-risk solutions.
+
+## Autonomous Implementation
+
+Planning is one thing. Execution is another.
+
+To evaluate implementation quality, I pushed the current state of ARIC to a separate branch and allowed Fable 5 to work autonomously.
+
+This is where I noticed the biggest difference from Opus 4.8.
+
+Fable 5 appears to have a very different coding style.
+
+Rather than making large edits across multiple files, it preferred a series of small, incremental modifications. It would frequently make tiny adjustments, validate them, and then continue iterating.
+
+![Fable 5's signature style: small, verified edits — one or four lines at a time](${FABLE_DIR}/Screenshot%202026-06-12%20113210.png)
+
+As a result, the overall pace felt slower.
+
+However, the model compensated for that by performing significantly more verification.
+
+Throughout implementation it repeatedly ran:
+
+* Smoke tests
+* Unit tests
+* End-to-end tests
+* Additional validation checks wherever possible
+
+The behavior felt less like a model trying to maximize coding speed and more like one trying to minimize the probability of introducing regressions.
+
+Whether that is desirable depends on the project, but for production systems I generally view it as a positive characteristic.
+
+## Where the Model Still Struggles
+
+Although the implementation largely matched the proposed plan, not everything integrated perfectly.
+
+One example involved a \`soul.md\` file that was introduced as a form of persistent self-reference and memory for the agent.
+
+The feature itself was implemented successfully, but the resulting behavior revealed a limitation. The agent still relied heavily on existing prompt structures and did not consistently use the new memory layer as intended.
+
+This highlighted something important:
+
+Fable 5 is good at implementing requested systems, but it still requires strong guidance when dealing with behavioral consistency, edge cases, and long-term product vision.
+
+The model does not automatically reason through every implication of a design change.
+
+In many cases, it executes the specification rather than challenging or extending it.
+
+## A Note on Prompting
+
+One important detail about this evaluation is that I intentionally avoided highly optimized prompts.
+
+I wasn't trying to maximize the model's performance.
+
+Instead, I wanted to measure its default behavior:
+
+* How well it understands intent
+* What questions it asks
+* How effectively it gathers context
+* How much guidance it requires
+
+Because of that, this review reflects Fable 5's baseline capability rather than its ceiling.
+
+In fact, one of my strongest impressions is that the model likely has substantially more capability than what I observed during these tests.
+
+With stronger prompting, clearer architectural direction, and better context engineering, I can easily imagine Fable 5 feeling like a significant leap over both Opus 4.8 and Sonnet in certain workflows.
+
+The capability appears to be there.
+
+The difference is that Fable 5 often waits for direction rather than assuming it.
+
+## Final Thoughts
+
+After testing Fable 5 on a real software project rather than isolated benchmarks, my overall impression is positive.
+
+Its strongest improvements over Opus 4.8 appear to be:
+
+* Faster codebase comprehension
+* Better use of external research
+* Stronger validation and testing habits
+* More production-oriented implementation behavior
+
+At the same time, it remains conservative in both planning and architecture. It prefers incremental progress over ambitious redesigns and still depends heavily on the user to provide vision and strategic direction.
+
+Fable 5 doesn't feel like a model optimized for flashy demos.
+
+It feels like a model optimized for reducing engineering mistakes.
+
+For teams maintaining and extending existing systems, that may be exactly the right tradeoff.
+`.trim(),
+  },
+];
+
+export function getBlogPost(slug: string): BlogPost | undefined {
+  return blogPosts.find((p) => p.slug === slug);
+}

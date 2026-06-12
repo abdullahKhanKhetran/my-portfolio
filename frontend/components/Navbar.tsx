@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 interface NavItem {
   label: string;
@@ -10,20 +11,35 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "#home" },
   { label: "Projects", href: "#portfolio" },
   { label: "Skills", href: "#skills" },
+  { label: "Blog", href: "/blogs" },
   { label: "Testimonials", href: "#testimonials" },
   { label: "Contact", href: "#contact" },
 ];
+
+const HASH_ITEMS = NAV_ITEMS.filter((item) => item.href.startsWith("#"));
 
 export default function Navbar() {
   const [active, setActive] = useState("#home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const isHome = pathname === "/";
 
   useEffect(() => {
+    if (!isHome) {
+      setActive(pathname.startsWith("/blogs") ? "/blogs" : "");
+      const handleScroll = () => setIsScrolled(window.scrollY > 20);
+      handleScroll();
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      const offsets = NAV_ITEMS.map((item) => {
+      const offsets = HASH_ITEMS.map((item) => {
         const el = document.querySelector(item.href);
         if (!el) return Number.POSITIVE_INFINITY;
         return el.getBoundingClientRect().top - 90;
@@ -35,17 +51,27 @@ export default function Navbar() {
       }
 
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2) {
-        idx = NAV_ITEMS.length - 1;
+        idx = HASH_ITEMS.length - 1;
       }
 
-      setActive(NAV_ITEMS[idx].href);
+      setActive(HASH_ITEMS[idx].href);
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isHome, pathname]);
 
   const handleClick = (href: string) => {
+    if (href.startsWith("/")) {
+      setActive(href);
+      router.push(href);
+      return;
+    }
+    if (!isHome) {
+      router.push(`/${href}`);
+      return;
+    }
     setActive(href);
     const el = document.querySelector(href) as HTMLElement | null;
     if (el) {
