@@ -6,7 +6,10 @@ import { usePathname } from "next/navigation";
 export default function PageTransitionWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   return (
-    <AnimatePresence mode="wait">
+    // initial={false}: the first paint (hard load / typed URL) renders visible —
+    // otherwise the SSR HTML ships opacity:0 and a skipped enter animation
+    // leaves the whole page blank. Route changes still animate.
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={pathname}
         initial={{ opacity: 0, y: 12 }}
