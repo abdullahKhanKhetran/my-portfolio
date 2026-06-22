@@ -15,22 +15,22 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: "Tech Startup Founder",
-    role: "CEO",
-    company: "StartupX",
+    name: "Zaryab Ali Anwar",
+    role: "Team Lead",
+    company: "Python Technologies",
     quote:
       "Abdullah delivered a flawless mobile app that exceeded our expectations. His attention to detail and DevOps expertise saved us months of development time.",
     glow: "#8b5cf6",
-    initials: "SF",
+    initials: "ZA",
   },
   {
-    name: "Business Owner",
+    name: "Mian Noor Elahi",
     role: "Director",
     company: "Alnoor Enterprises",
     quote:
       "The ERP system Abdullah built transformed our business operations completely. The vibrant UI made it easy for our team to adopt immediately.",
     glow: "#06b6d4",
-    initials: "BO",
+    initials: "MN",
   },
   {
     name: "Project Manager",

@@ -1,4 +1,6 @@
 "use client";
+
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
@@ -27,10 +29,11 @@ export default function Navbar() {
   const router = useRouter();
 
   const isHome = pathname === "/";
+  const isBlogRoute = pathname.startsWith("/blogs");
+  const currentActive = isHome ? active : isBlogRoute ? "/blogs" : "";
 
   useEffect(() => {
     if (!isHome) {
-      setActive(pathname.startsWith("/blogs") ? "/blogs" : "");
       const handleScroll = () => setIsScrolled(window.scrollY > 20);
       handleScroll();
       window.addEventListener("scroll", handleScroll);
@@ -65,7 +68,6 @@ export default function Navbar() {
 
   const handleClick = (href: string) => {
     if (href.startsWith("/")) {
-      setActive(href);
       router.push(href);
       return;
     }
@@ -83,30 +85,71 @@ export default function Navbar() {
     }
   };
 
-  const isContactActive = active === "#contact";
+  const isContactActive = currentActive === "#contact";
+
+  const renderNavItem = (item: NavItem, mobile = false) => {
+    const sharedClassName = `transition-colors duration-200 rounded-full focus:outline-none ${
+      mobile ? "px-4 py-2 text-base font-medium" : "px-3 py-1 text-sm lg:text-lg font-normal"
+    } ${
+      currentActive === item.href
+        ? isContactActive && item.href === "#contact"
+          ? "bg-zinc-900 text-white dark:bg-white dark:text-black shadow-sm"
+          : mobile
+            ? "bg-zinc-900/10 text-zinc-900 dark:bg-white/10 dark:text-white"
+            : "bg-black/10 dark:bg-white/10 text-black dark:text-white shadow-sm"
+        : mobile
+          ? "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+          : "text-zinc-500 dark:text-zinc-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white"
+    }`;
+
+    if (item.href.startsWith("/")) {
+      return (
+        <Link
+          href={item.href}
+          prefetch
+          onClick={() => {
+            if (mobile) setIsMobileMenuOpen(false);
+          }}
+          className={sharedClassName}
+        >
+          {item.label}
+        </Link>
+      );
+    }
+
+    return (
+      <button
+        className={sharedClassName}
+        onClick={() => {
+          handleClick(item.href);
+          if (mobile) setIsMobileMenuOpen(false);
+        }}
+      >
+        {item.label}
+      </button>
+    );
+  };
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 py-3 px-4 md:py-4 md:px-8 flex justify-center transition-all duration-300 ${
+      className={`fixed top-0 left-0 z-50 flex w-full justify-center border-b border-transparent px-4 py-4 transition-all duration-300 md:px-8 md:py-4 ${
         isScrolled
-          ? "bg-white/70 dark:bg-black/60 backdrop-blur-md"
+          ? "bg-white/75 dark:bg-black/65 backdrop-blur-md border-black/5 dark:border-white/10"
           : "bg-transparent"
       }`}
     >
       <div className="absolute inset-0 -z-10 backdrop-blur-md" />
-      <div className="absolute left-1/2 top-full -translate-x-1/2 h-12 w-[min(88vw,68rem)] bg-black/10 dark:bg-white/20 blur-2xl pointer-events-none" />
+      <div className="absolute left-1/2 top-full h-12 w-[min(88vw,68rem)] -translate-x-1/2 bg-black/10 dark:bg-white/20 blur-2xl pointer-events-none" />
       <div className="absolute left-0 top-full h-14 w-full bg-gradient-to-b from-black/10 via-black/[0.03] to-transparent dark:from-black/70 dark:via-black/20 dark:to-transparent pointer-events-none" />
 
-      {/* Theme toggle */}
-      <ThemeToggle className="absolute right-16 md:right-6 top-1/2 -translate-y-1/2 z-50" />
+      <ThemeToggle className="absolute right-16 top-1/2 z-50 -translate-y-1/2 md:right-6" />
 
-      {/* Mobile menu button */}
       <button
-        className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 p-2 text-zinc-900 dark:text-white z-50"
+        className="absolute right-4 top-1/2 z-50 -translate-y-1/2 rounded-full border border-zinc-900/10 bg-white/80 p-3 text-zinc-900 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-black/30 dark:text-white md:hidden"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         aria-label="Toggle menu"
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           {isMobileMenuOpen ? (
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           ) : (
@@ -115,53 +158,22 @@ export default function Navbar() {
         </svg>
       </button>
 
-      {/* Desktop Navigation */}
-      <ul className="hidden md:flex list-none gap-6 lg:gap-16 items-center">
+      <ul className="hidden items-center list-none gap-6 lg:gap-16 md:flex">
         {NAV_ITEMS.map((item) => (
-          <li key={item.href}>
-            <button
-              className={`text-sm lg:text-lg font-normal transition-colors duration-200 px-3 py-1 rounded-full focus:outline-none ${
-                active === item.href
-                  ? isContactActive
-                    ? "bg-zinc-900 text-white dark:bg-white dark:text-black shadow-sm"
-                    : "bg-black/10 dark:bg-white/10 text-black dark:text-white shadow-sm"
-                  : "text-zinc-500 dark:text-zinc-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white"
-              }`}
-              onClick={() => handleClick(item.href)}
-            >
-              {item.label}
-            </button>
-          </li>
+          <li key={item.href}>{renderNavItem(item)}</li>
         ))}
       </ul>
 
-      {/* Mobile Menu */}
       <div
-        className={`md:hidden absolute top-full left-0 w-full bg-white/95 dark:bg-black/90 backdrop-blur-lg transition-all duration-300 ${
+        className={`absolute left-0 top-full w-full border-b border-black/5 bg-white/95 backdrop-blur-lg transition-all duration-300 dark:border-white/10 dark:bg-black/90 md:hidden ${
           isMobileMenuOpen
-            ? "opacity-100 visible"
-            : "opacity-0 invisible pointer-events-none"
+            ? "visible opacity-100"
+            : "pointer-events-none invisible opacity-0"
         }`}
       >
-        <ul className="flex flex-col items-center py-6 gap-4">
+        <ul className="flex flex-col items-center gap-4 px-4 py-6 pb-7">
           {NAV_ITEMS.map((item) => (
-            <li key={item.href}>
-              <button
-                className={`text-base font-medium transition-colors duration-200 px-4 py-2 rounded-full focus:outline-none ${
-                  active === item.href
-                    ? isContactActive
-                      ? "bg-zinc-900 text-white dark:bg-white dark:text-black shadow-sm"
-                      : "bg-zinc-900/10 text-zinc-900 dark:bg-white/10 dark:text-white"
-                    : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-                }`}
-                onClick={() => {
-                  handleClick(item.href);
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                {item.label}
-              </button>
-            </li>
+            <li key={item.href}>{renderNavItem(item, true)}</li>
           ))}
         </ul>
       </div>
