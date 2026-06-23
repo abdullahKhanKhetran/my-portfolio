@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from functools import lru_cache
 from pathlib import Path
 from urllib.parse import quote_plus
@@ -41,8 +40,11 @@ class Settings(BaseSettings):
     cloudinary_upload_preset: str | None = None
     cloudinary_folder: str = "portfolio"
 
+    redis_url: str | None = None
+    image_cache_ttl_seconds: int = 60 * 60 * 24 * 30
+
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(".env", "backend/.env"),
         env_file_encoding="utf-8",
         extra="ignore",
         enable_decoding=False,
@@ -97,9 +99,6 @@ class Settings(BaseSettings):
         return f"{scheme}://{user_enc}:{pass_enc}@{host_part}"
 
     def resolve_database_url(self) -> str:
-        if self.database_url and not self.database_url.strip():
-            self.database_url = None
-
         if self.supabase_db_host and self.supabase_db_password:
             user = quote_plus(self.supabase_db_user)
             password = quote_plus(self.supabase_db_password)
@@ -118,7 +117,7 @@ class Settings(BaseSettings):
         if self.supabase_db_url:
             return self._sanitize_database_url(self.supabase_db_url)
 
-        if os.getenv("VERCEL") or self.environment.lower() == "production":
+        if self.environment.lower() == "production":
             raise RuntimeError("A DATABASE_URL or SUPABASE_DB_URL is required in production")
 
         sqlite_path = (Path(__file__).resolve().parents[2] / "portfolio.db").resolve().as_posix()

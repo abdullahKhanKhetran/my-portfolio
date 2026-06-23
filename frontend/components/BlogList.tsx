@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { playClick } from "../lib/sounds";
-import { blogPosts } from "./blogData";
+import { proxiedImageUrl, type BlogPost } from "../lib/content";
 
-const GLOW = "#34d399"; // emerald — the blog's signature accent
+const GLOW = "#34d399";
 
 const containerVariants = {
   hidden: {},
@@ -22,13 +22,12 @@ const itemVariants = {
   },
 };
 
-export default function BlogList() {
-  const posts = [...blogPosts].sort((a, b) => b.date.localeCompare(a.date));
+export default function BlogList({ posts }: { posts: BlogPost[] }) {
+  const sortedPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <div className="min-h-screen text-zinc-900 dark:text-white px-4 sm:px-6 lg:px-8 pt-12 pb-24">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -39,25 +38,15 @@ export default function BlogList() {
             ~/blogs
           </p>
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
-            Field{" "}
-            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400 bg-clip-text text-transparent">
-              Notes
-            </span>
+            Field <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400 bg-clip-text text-transparent">Notes</span>
           </h1>
           <p className="text-zinc-600 dark:text-zinc-400 text-base sm:text-lg mt-4 max-w-2xl leading-relaxed">
-            Long-form notes from the workbench — building software, testing AI
-            tooling, and whatever else survives contact with production.
+            Long-form notes from the workbench — building software, testing AI tooling, and whatever else survives contact with production.
           </p>
         </motion.header>
 
-        {/* Posts */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col gap-8"
-        >
-          {posts.map((post, index) => (
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="flex flex-col gap-8">
+          {sortedPosts.map((post, index) => (
             <motion.article key={post.slug} variants={itemVariants}>
               <Link
                 href={`/blogs/${post.slug}`}
@@ -84,22 +73,17 @@ export default function BlogList() {
                 }}
               >
                 <div className="grid md:grid-cols-[1fr_260px]">
-                  {/* Text */}
                   <div className="p-6 sm:p-8 flex flex-col gap-4 relative">
-                    {/* Ghost index number */}
-                    <span
-                      aria-hidden
-                      className="absolute top-4 right-6 font-mono text-6xl font-bold text-zinc-900/[0.05] dark:text-white/[0.04] select-none md:right-4"
-                    >
+                    <span aria-hidden className="absolute top-4 right-6 font-mono text-6xl font-bold text-zinc-900/[0.05] dark:text-white/[0.04] select-none md:right-4">
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
                     <div className="flex items-center gap-3 font-mono text-xs tracking-wider">
                       <time dateTime={post.date} className="text-emerald-600 dark:text-emerald-400/90">
-                        {post.displayDate}
+                        {post.display_date}
                       </time>
                       <span className="text-zinc-600">·</span>
-                      <span className="text-zinc-500">{post.readTime}</span>
+                      <span className="text-zinc-500">{post.read_time}</span>
                     </div>
 
                     <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white leading-snug group-hover:text-emerald-900 dark:group-hover:text-emerald-50 transition-colors duration-300">
@@ -112,15 +96,7 @@ export default function BlogList() {
 
                     <div className="flex flex-wrap items-center gap-2 mt-auto pt-2">
                       {post.tags.slice(0, 4).map((tag) => (
-                        <span
-                          key={tag}
-                          className="font-mono text-[0.68rem] px-2.5 py-1 rounded-full"
-                          style={{
-                            background: `${GLOW}14`,
-                            color: "var(--accent-emerald)",
-                            border: `1px solid ${GLOW}2e`,
-                          }}
-                        >
+                        <span key={tag} className="font-mono text-[0.68rem] px-2.5 py-1 rounded-full" style={{ background: `${GLOW}14`, color: "var(--accent-emerald)", border: `1px solid ${GLOW}2e` }}>
                           {tag}
                         </span>
                       ))}
@@ -133,13 +109,13 @@ export default function BlogList() {
                     </div>
                   </div>
 
-                  {/* Cover */}
                   <div className="relative h-48 md:h-auto md:min-h-full order-first md:order-none">
                     <Image
-                      src={post.cover}
+                      src={proxiedImageUrl(post.cover) ?? ""}
                       alt=""
                       fill
                       sizes="(max-width: 768px) 100vw, 260px"
+                      unoptimized
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/40 to-transparent md:from-transparent md:to-black/30" />

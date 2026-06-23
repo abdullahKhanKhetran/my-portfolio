@@ -37,68 +37,41 @@ const LINKS = [
 ];
 
 export default function ContactSection({ isVisible = false }: { isVisible?: boolean }) {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <section id="contact" className="relative min-h-[600px] overflow-hidden px-4 py-24 sm:px-6">
-      {/* Subtle grid pattern */}
+    <section id="contact" className="relative min-h-[620px] overflow-hidden px-4 py-24 sm:px-6 lg:px-8">
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage: `linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)" }} />
 
-      {/* Glow orb */}
-      <div
-        className="pointer-events-none absolute left-1/3 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)" }}
-      />
-
-      {/* Content */}
-      <div className="relative z-10 mx-auto max-w-5xl">
+      <div className="relative z-10 mx-auto max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, y: 60, scale: 0.95 }}
-          animate={isVisible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 60, scale: 0.95 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-xl"
+          initial={{ opacity: 0, y: 40 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-2xl"
         >
-          {/* Tag */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-zinc-900/10 bg-zinc-900/5 px-4 py-1.5 dark:border-white/10 dark:bg-white/5">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-green-500 dark:bg-green-400" />
-            <span className="text-xs font-medium uppercase tracking-widest text-zinc-600 dark:text-zinc-400">
-              Available for work
-            </span>
-          </div>
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.35em] text-zinc-500 dark:text-zinc-400">
+            Contact
+          </p>
 
-          <h2
-            className="mb-6 text-4xl font-bold leading-tight text-zinc-900 dark:text-white sm:text-5xl md:text-6xl"
-            style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", letterSpacing: "-0.02em" }}
-          >
+          <h2 className="text-4xl font-bold leading-tight text-zinc-900 dark:text-white sm:text-5xl md:text-6xl" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", letterSpacing: "-0.03em" }}>
             Let&apos;s Build
             <br />
-            <span
-              style={{
-                background: "linear-gradient(135deg, #8b5cf6, #06b6d4)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
+            <span style={{ background: "linear-gradient(135deg, #8b5cf6, #06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               Something Great
             </span>
           </h2>
 
-          <p
-            className="mb-10 text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg"
-            style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontWeight: 300 }}
-          >
-            Got a project in mind? Let&apos;s connect and turn your idea into reality.
-            I&apos;m always open to interesting work and collaborations.
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontWeight: 300 }}>
+            Got a project in mind? Let&apos;s connect and turn your idea into reality. I&apos;m always open to interesting work and collaborations.
           </p>
 
-          {/* CTA buttons */}
-          <div className="mb-10 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap gap-3">
             {LINKS.map((link) => (
               <a
                 key={link.label}
@@ -106,23 +79,18 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
                 target={link.href.startsWith("http") ? "_blank" : undefined}
                 rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 onClick={() => playClick()}
-                className="flex items-center gap-2 font-medium transition-all duration-300 hover:scale-105"
+                className="group inline-flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-medium transition-all duration-300 hover:scale-105"
                 style={
                   link.primary
                     ? {
-                        padding: "12px 24px",
-                        borderRadius: 12,
                         background: "var(--btn-primary-bg)",
                         color: "var(--btn-primary-fg)",
-                        fontSize: "0.9rem",
+                        borderColor: "transparent",
                       }
                     : {
-                        padding: "12px 20px",
-                        borderRadius: 12,
-                        background: "var(--card-bg)",
+                        background: "transparent",
                         color: "var(--text-secondary)",
-                        border: "1px solid var(--card-border)",
-                        fontSize: "0.9rem",
+                        borderColor: "var(--card-border)",
                       }
                 }
                 onMouseEnter={(e) => {
@@ -133,22 +101,18 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
                 }}
               >
                 {link.icon}
-                {link.label}
+                <span>{link.label}</span>
               </a>
             ))}
           </div>
 
-          {/* Info */}
-          <div className="mb-12 flex flex-wrap gap-6 text-sm text-zinc-600 dark:text-zinc-500">
-            <span>📍 Pakistan</span>
-            <span>✉️ abdullahkhitran2005@gmail.com</span>
-          </div>
-
-          {/* Footer */}
-          <div className="border-t border-zinc-900/10 pt-6 dark:border-white/5">
-            <p className="text-xs text-zinc-500 dark:text-zinc-600">
-              © {currentYear} Abdullah Khan · Full Stack Developer · Built with Next.js
-            </p>
+          <div className="mt-8 flex flex-wrap gap-3 text-sm text-zinc-600 dark:text-zinc-400">
+            <span className="rounded-full border border-zinc-900/10 bg-zinc-900/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
+              📍 Islamabad, Pakistan
+            </span>
+            <span className="rounded-full border border-zinc-900/10 bg-zinc-900/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
+              ✉️ abdullahkhitran2005@gmail.com
+            </span>
           </div>
         </motion.div>
       </div>

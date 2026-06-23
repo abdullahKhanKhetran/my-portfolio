@@ -4,21 +4,34 @@ import SkillsSection from "../components/SkillsSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import ContactSection from "../components/ContactSection";
 import AnimatedSection from "../components/AnimatedSection";
+import { getProjects, getSkills, getTestimonials, getProfileBundle, parsePersonProfile } from "../lib/content";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function Home() {
+  const [projects, skills, testimonials, profileBundle] = await Promise.all([
+    getProjects(),
+    getSkills(),
+    getTestimonials(),
+    getProfileBundle(),
+  ]);
+
+  const profile = parsePersonProfile(profileBundle.person);
+
   return (
     <>
       <AnimatedSection id="home" parallaxOffset={0}>
-        <HeroSection />
+        <HeroSection profile={profile} />
       </AnimatedSection>
       <AnimatedSection id="portfolio" parallaxOffset={20}>
-        <PortfolioSection />
+        <PortfolioSection projects={projects} />
       </AnimatedSection>
       <AnimatedSection id="skills" parallaxOffset={15}>
-        <SkillsSection />
+        <SkillsSection skills={skills} />
       </AnimatedSection>
       <AnimatedSection id="testimonials" parallaxOffset={20}>
-        <TestimonialsSection />
+        <TestimonialsSection testimonials={testimonials} />
       </AnimatedSection>
       <AnimatedSection id="contact" parallaxOffset={10}>
         <ContactSection />

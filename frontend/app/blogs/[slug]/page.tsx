@@ -1,19 +1,18 @@
-import { Metadata } from "next";
-import Link from "next/link";
-import { blogPosts, getBlogPost } from "../../../components/blogData";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import BlogDetail from "../../../components/BlogDetail";
+import { absoluteProxiedImageUrl, getBlogBySlug } from "../../../lib/content";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogBySlug(slug);
   return {
     title: post ? `${post.title} | Abdullah Khan` : "Blog | Abdullah Khan",
     description: post?.excerpt || "Blog post by Abdullah Khan",
@@ -23,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           description: post.excerpt,
           type: "article",
           publishedTime: post.date,
-          images: [{ url: post.cover }],
+          images: absoluteProxiedImageUrl(post.cover) ? [{ url: absoluteProxiedImageUrl(post.cover)! }] : undefined,
         }
       : undefined,
   };
@@ -31,17 +30,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogBySlug(slug);
 
   if (!post) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-6">
-        <h1 className="text-4xl font-bold">Post not found</h1>
-        <Link href="/blogs" className="text-emerald-400 hover:underline font-mono text-sm">
-          cd ~/blogs
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
   return <BlogDetail post={post} />;

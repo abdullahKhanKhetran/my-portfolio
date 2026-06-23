@@ -20,11 +20,11 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
     <button
       onClick={toggle}
       aria-label="Toggle light/dark theme"
-      className={`w-9 h-9 rounded-full flex items-center justify-center border border-zinc-900/15 text-zinc-700 hover:bg-zinc-900/5 dark:border-white/15 dark:text-zinc-300 dark:hover:bg-white/10 transition-all duration-200 hover:scale-110 ${className}`}
+      className={`flex h-12 w-12 items-center justify-center rounded-tl-[999px] rounded-tr-[14px] rounded-br-[999px] rounded-bl-[14px] bg-white/75 text-zinc-700 shadow-xl shadow-black/10 backdrop-blur-md transition-transform duration-200 hover:scale-105 dark:bg-black/45 dark:text-zinc-200 ${className}`}
     >
       {/* Sun — shown in dark mode (tap for light) */}
       <svg
-        className="w-4.5 h-4.5 hidden dark:block"
+        className="hidden h-5 w-5 dark:block"
         fill="none"
         stroke="currentColor"
         strokeWidth={2}
@@ -35,7 +35,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       </svg>
       {/* Moon — shown in light mode (tap for dark) */}
       <svg
-        className="w-4.5 h-4.5 block dark:hidden"
+        className="block h-5 w-5 dark:hidden"
         fill="none"
         stroke="currentColor"
         strokeWidth={2}

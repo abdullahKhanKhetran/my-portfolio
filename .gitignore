@@ -1,3 +1,7 @@
 .claude
 .kilo
 .claude/worktrees/great-moser-f83cf9
+.env
+__pycache__/
+*.pyc
+backend/portfolio.db

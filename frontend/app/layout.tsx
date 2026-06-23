@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "../components/CustomCursor";
 import Navbar from "../components/Navbar";
 import GlobalBackground from "../components/GlobalBackground";
 import PageTransitionWrapper from "../components/PageTransitionWrapper";
 import LoadingScreen from "../components/LoadingScreen";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -31,9 +21,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -51,10 +41,8 @@ export default function RootLayout({
       <body className={`min-h-screen ${spaceGrotesk.variable}`}>
         <LoadingScreen />
         <GlobalBackground />
-        <div style={{ height: "72px" }} aria-hidden className="md:block hidden" />
-        <div style={{ height: "96px" }} aria-hidden className="md:hidden block" />
         <Navbar />
-        <main className="w-full overflow-x-clip relative z-10">
+        <main className="relative z-10 w-full overflow-x-clip">
           <PageTransitionWrapper>{children}</PageTransitionWrapper>
         </main>
         <CustomCursor />

@@ -66,6 +66,7 @@ export default function AnimatedSection({
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
+    setIsVisible(true);
     return () => observer.disconnect();
   }, []);
 

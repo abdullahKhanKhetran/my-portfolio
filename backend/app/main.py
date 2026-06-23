@@ -7,6 +7,7 @@ from .api.routes.chat import router as chat_router
 from .api.routes.contact import router as contact_router
 from .api.routes.health import router as health_router
 from .api.routes.knowledge import router as knowledge_router
+from .api.routes.media import router as media_router
 from .api.routes.profile import router as profile_router
 from .api.routes.projects import router as projects_router
 from .api.routes.skills import router as skills_router
@@ -21,8 +22,8 @@ settings = get_settings()
 app = FastAPI(title=settings.app_name)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -30,6 +31,7 @@ app.add_middleware(
 app.include_router(health_router, prefix=settings.api_v1_prefix)
 app.include_router(profile_router, prefix=settings.api_v1_prefix)
 app.include_router(knowledge_router, prefix=settings.api_v1_prefix)
+app.include_router(media_router, prefix=settings.api_v1_prefix)
 app.include_router(projects_router, prefix=settings.api_v1_prefix)
 app.include_router(skills_router, prefix=settings.api_v1_prefix)
 app.include_router(testimonials_router, prefix=settings.api_v1_prefix)

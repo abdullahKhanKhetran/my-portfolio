@@ -1,40 +1,31 @@
-import { projects } from "../../../components/portfolioData";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import ProjectDetail from "../../../components/ProjectDetail";
-import { Metadata } from "next";
+import { getProjectBySlug } from "../../../lib/content";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  return projects.map((project: { name: string }) => ({
-    slug: project.name.toLowerCase().replace(/\s+/g, "-"),
-  }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find(
-    (p: { name: string; description: string }) => p.name.toLowerCase().replace(/\s+/g, "-") === slug
-  );
+  const project = await getProjectBySlug(slug);
+
   return {
-    title: project ? `${project.name} | Abdullah Khan` : "Project | Abdullah Khan",
-    description: project?.description || "Project Portfolio",
+    title: project ? `${project.title} | Abdullah Khan` : "Project | Abdullah Khan",
+    description: project?.summary || "Project Portfolio",
   };
 }
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
-  const project = projects.find(
-    (p: { name: string; description: string; fullDescription: string; icon: string; screenshots: string[]; tech: string[]; features: string[]; link: string; year: string; role: string }) => p.name.toLowerCase().replace(/\s+/g, "-") === slug
-  );
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <h1 className="text-4xl font-bold">Project not found</h1>
-      </div>
-    );
+    notFound();
   }
 
   return <ProjectDetail project={project} />;
