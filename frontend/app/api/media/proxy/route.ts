@@ -1,7 +1,5 @@
 import { NextRequest } from "next/server";
 
-const BACKEND_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.BACKEND_API_BASE_URL ?? "http://127.0.0.1:8011/api/v1";
-
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
@@ -11,7 +9,7 @@ export async function GET(request: NextRequest) {
     return Response.json({ detail: "Missing url" }, { status: 400 });
   }
 
-  const upstreamUrl = new URL(`${BACKEND_API_BASE.replace(/\/$/, "")}/media/proxy`);
+  const upstreamUrl = new URL("/api/v1/media/proxy", request.url);
   upstreamUrl.searchParams.set("url", sourceUrl);
 
   let upstream: Response;

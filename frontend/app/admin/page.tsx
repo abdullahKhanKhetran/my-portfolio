@@ -87,7 +87,7 @@ type CloudinaryUploadResult = {
   public_id?: string;
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8011/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
 const TOKEN_STORAGE_KEY = "portfolio-admin-token";
 const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;

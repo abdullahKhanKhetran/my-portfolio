@@ -3,7 +3,7 @@
 import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8011/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
 
 type ChatRole = "user" | "assistant";
 
@@ -20,7 +20,15 @@ type StreamEvent =
   | { type: "error"; message: string };
 
 function buildWsUrl() {
-  const url = new URL(API_BASE.endsWith("/") ? API_BASE : `${API_BASE}/`);
+  if (API_BASE.startsWith("http://") || API_BASE.startsWith("https://")) {
+    const url = new URL(API_BASE.endsWith("/") ? API_BASE : `${API_BASE}/`);
+    url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+    url.pathname = `${url.pathname.replace(/\/$/, "")}/chat/ws`;
+    return url.toString();
+  }
+
+  const base = API_BASE.endsWith("/") ? API_BASE : `${API_BASE}/`;
+  const url = new URL(base, window.location.origin);
   url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
   url.pathname = `${url.pathname.replace(/\/$/, "")}/chat/ws`;
   return url.toString();
