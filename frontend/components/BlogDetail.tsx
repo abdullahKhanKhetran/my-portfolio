@@ -51,7 +51,11 @@ export default function BlogDetail({ post }: { post: BlogPost }) {
         <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }} className="relative group mb-14">
           <div className="absolute inset-0 rounded-3xl blur-2xl opacity-25 group-hover:opacity-40 transition-opacity duration-500" style={{ background: `linear-gradient(120deg, ${GLOW}, #22d3ee)` }} />
           <div className="relative aspect-[16/9] rounded-3xl overflow-hidden border border-white/10">
-            <Image src={proxiedImageUrl(post.cover) ?? ""} alt={post.title} fill priority unoptimized sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
+            {proxiedImageUrl(post.cover) ? (
+              <Image src={proxiedImageUrl(post.cover)!} alt={post.title} fill priority unoptimized sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
+            ) : (
+              <div className="h-full w-full bg-gradient-to-br from-emerald-500/20 via-cyan-500/10 to-transparent" />
+            )}
           </div>
         </motion.div>
 
@@ -79,3 +83,4 @@ export default function BlogDetail({ post }: { post: BlogPost }) {
     </div>
   );
 }
+

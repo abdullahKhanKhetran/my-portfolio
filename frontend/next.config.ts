@@ -12,6 +12,18 @@ const nextConfig: NextConfig = {
       {
         pathname: "/api/media/proxy/**",
       },
+      {
+        pathname: "/blogs/**",
+      },
+      {
+        pathname: "/my_pictures/**",
+      },
+      {
+        pathname: "/app_icons/**",
+      },
+      {
+        pathname: "/elemeents/**",
+      },
     ],
   },
 };

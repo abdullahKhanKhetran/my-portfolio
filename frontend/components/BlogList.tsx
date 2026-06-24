@@ -110,14 +110,18 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
                   </div>
 
                   <div className="relative h-48 md:h-auto md:min-h-full order-first md:order-none">
-                    <Image
-                      src={proxiedImageUrl(post.cover) ?? ""}
-                      alt=""
-                      fill
-                      sizes="(max-width: 768px) 100vw, 260px"
-                      unoptimized
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
+                    {proxiedImageUrl(post.cover) ? (
+                      <Image
+                        src={proxiedImageUrl(post.cover)!}
+                        alt=""
+                        fill
+                        sizes="(max-width: 768px) 100vw, 260px"
+                        unoptimized
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-gradient-to-br from-emerald-500/20 via-cyan-500/10 to-transparent" />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/40 to-transparent md:from-transparent md:to-black/30" />
                   </div>
                 </div>
@@ -129,3 +133,4 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
     </div>
   );
 }
+

@@ -360,9 +360,15 @@ export default function AdminPage() {
     };
     const method = projectEditId ? "PUT" : "POST";
     const path = projectEditId ? `/admin/projects/${projectEditId}` : "/admin/projects";
-    await apiFetch(path, { method, body: JSON.stringify(body) });
-    resetProjectForm();
-    await loadAll();
+    try {
+      setStatus(projectEditId ? "Updating project..." : "Creating project...");
+      await apiFetch(path, { method, body: JSON.stringify(body) });
+      resetProjectForm();
+      await loadAll();
+      setStatus(projectEditId ? "Project updated." : "Project created.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Failed to save project");
+    }
   }
 
   async function saveSkill(e: React.FormEvent) {
@@ -373,9 +379,15 @@ export default function AdminPage() {
     };
     const method = skillEditId ? "PUT" : "POST";
     const path = skillEditId ? `/admin/skills/${skillEditId}` : "/admin/skills";
-    await apiFetch(path, { method, body: JSON.stringify(body) });
-    resetSkillForm();
-    await loadAll();
+    try {
+      setStatus(skillEditId ? "Updating skill..." : "Creating skill...");
+      await apiFetch(path, { method, body: JSON.stringify(body) });
+      resetSkillForm();
+      await loadAll();
+      setStatus(skillEditId ? "Skill updated." : "Skill created.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Failed to save skill");
+    }
   }
 
   async function saveTestimonial(e: React.FormEvent) {
@@ -388,33 +400,56 @@ export default function AdminPage() {
     };
     const method = testimonialEditId ? "PUT" : "POST";
     const path = testimonialEditId ? `/admin/testimonials/${testimonialEditId}` : "/admin/testimonials";
-    await apiFetch(path, { method, body: JSON.stringify(body) });
-    resetTestimonialForm();
-    await loadAll();
+    try {
+      setStatus(testimonialEditId ? "Updating testimonial..." : "Creating testimonial...");
+      await apiFetch(path, { method, body: JSON.stringify(body) });
+      resetTestimonialForm();
+      await loadAll();
+      setStatus(testimonialEditId ? "Testimonial updated." : "Testimonial created.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Failed to save testimonial");
+    }
   }
 
   async function saveKnowledge(e: React.FormEvent) {
     e.preventDefault();
-    const updated = await apiFetch(`/admin/knowledge/${encodeURIComponent(knowledgePath)}`, {
-      method: "PUT",
-      body: JSON.stringify({ content: knowledgeDraft }),
-    });
-    setCurrentKnowledge(updated);
-    setStatus("Knowledge file saved.");
-    await loadAll();
+    try {
+      setStatus("Saving knowledge file...");
+      const updated = await apiFetch(`/admin/knowledge/${encodeURIComponent(knowledgePath)}`, {
+        method: "PUT",
+        body: JSON.stringify({ content: knowledgeDraft }),
+      });
+      setCurrentKnowledge(updated);
+      setStatus("Knowledge file saved.");
+      await loadAll();
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Failed to save knowledge file");
+    }
   }
 
   async function updateMessageStatus(message: Message, statusValue: string) {
-    await apiFetch(`/admin/messages/${message.id}`, {
-      method: "PUT",
-      body: JSON.stringify({ status: statusValue }),
-    });
-    await loadAll();
+    try {
+      setStatus(`Updating message status to ${statusValue}...`);
+      await apiFetch(`/admin/messages/${message.id}`, {
+        method: "PUT",
+        body: JSON.stringify({ status: statusValue }),
+      });
+      await loadAll();
+      setStatus("Message updated.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Failed to update message");
+    }
   }
 
   async function deleteEntity(path: string) {
-    await apiFetch(path, { method: "DELETE" });
-    await loadAll();
+    try {
+      setStatus("Deleting item...");
+      await apiFetch(path, { method: "DELETE" });
+      await loadAll();
+      setStatus("Item deleted.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Failed to delete item");
+    }
   }
 
   if (!isLoaded) {
@@ -737,5 +772,6 @@ export default function AdminPage() {
     </div>
   );
 }
+
 
 

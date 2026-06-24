@@ -138,14 +138,18 @@ export default function BlogContent({ content }: { content: string }) {
             return (
               <figure key={i} className="my-10">
                 <div className="rounded-2xl overflow-hidden border border-zinc-900/10 bg-zinc-900/[0.03] dark:border-white/10 dark:bg-white/[0.03]">
-                  <Image
-                    src={block.src!}
-                    alt={block.alt || ""}
-                    width={1400}
-                    height={900}
-                    className="w-full h-auto"
-                    sizes="(max-width: 768px) 100vw, 768px"
-                  />
+                  {block.src ? (
+                    <Image
+                      src={block.src}
+                      alt={block.alt || ""}
+                      width={1400}
+                      height={900}
+                      className="w-full h-auto"
+                      sizes="(max-width: 768px) 100vw, 768px"
+                    />
+                  ) : (
+                    <div className="aspect-[14/9] w-full bg-gradient-to-br from-emerald-500/20 via-cyan-500/10 to-transparent" />
+                  )}
                 </div>
                 {block.alt && (
                   <figcaption className="mt-3 text-center font-mono text-xs text-zinc-500 tracking-wide">
@@ -165,3 +169,4 @@ export default function BlogContent({ content }: { content: string }) {
     </div>
   );
 }
+
