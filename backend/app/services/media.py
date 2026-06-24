@@ -41,7 +41,14 @@ async def fetch_cached_image(url: str, settings: Settings, redis_client) -> Cach
         raise HTTPException(status_code=400, detail="Image host is not allowed")
 
     key = _cache_key(url)
-    cached = await redis_client.hgetall(key) if redis_client else {}
+    cached = {}
+    if redis_client:
+        try:
+            cached = await redis_client.hgetall(key)
+        except Exception as exc:
+            logger.warning("Failed to read image cache for %s: %s", url, exc)
+            cached = {}
+
     if cached:
         content = cached.get(b"content")
         content_type = cached.get(b"content_type", b"image/jpeg").decode("utf-8")
