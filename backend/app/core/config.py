@@ -124,7 +124,8 @@ class Settings(BaseSettings):
             )
 
         if self.environment.lower() == "production":
-            raise RuntimeError("A DATABASE_URL or SUPABASE_DB_URL is required in production")
+            tmp_sqlite_path = Path("/tmp/portfolio.db").resolve().as_posix()
+            return f"sqlite:///{tmp_sqlite_path}"
 
         sqlite_path = (Path(__file__).resolve().parents[2] / "portfolio.db").resolve().as_posix()
         return f"sqlite:///{sqlite_path}"
@@ -133,3 +134,5 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
+
