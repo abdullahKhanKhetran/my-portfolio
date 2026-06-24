@@ -81,16 +81,10 @@ type TestimonialForm = {
   sort_order: number;
 };
 
-type CloudinaryUploadResult = {
-  secure_url?: string;
-  url?: string;
-  public_id?: string;
-};
-
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
 const TOKEN_STORAGE_KEY = "portfolio-admin-token";
-const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+
 const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "projects", label: "Projects" },
   { key: "skills", label: "Skills" },
@@ -248,34 +242,32 @@ export default function AdminPage() {
   }
 
   async function uploadAvatar(file: File) {
-    if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
-      throw new Error("Cloudinary upload settings are missing in frontend/.env");
-    }
-
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 
     setIsUploadingAvatar(true);
     setStatus("Uploading testimonial avatar...");
 
     try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+      const response = await fetch(`${API_BASE}/admin/testimonials/avatar`, {
         method: "POST",
+        headers: {
+          ...authHeaders,
+        },
         body: formData,
+        cache: "no-store",
       });
 
-      const payload = (await response.json()) as CloudinaryUploadResult;
+      const payload = (await response.json()) as { url?: string; detail?: string };
       if (!response.ok) {
-        throw new Error(payload?.secure_url ? "Upload failed" : "Cloudinary upload failed");
+        throw new Error(payload?.detail || "Avatar upload failed");
       }
 
-      const uploadedUrl = payload.secure_url ?? payload.url;
-      if (!uploadedUrl) {
+      if (!payload.url) {
         throw new Error("Cloudinary did not return an image URL");
       }
 
-      setTestimonialForm((current) => ({ ...current, avatar_url: uploadedUrl }));
+      setTestimonialForm((current) => ({ ...current, avatar_url: payload.url ?? "" }));
       setStatus("Testimonial avatar uploaded.");
     } finally {
       setIsUploadingAvatar(false);

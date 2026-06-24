@@ -16,8 +16,10 @@ from .core.config import get_settings
 from .db.base import Base
 from .db.session import engine
 from .scripts.seed import seed as seed_portfolio
+from .services.cloudinary import configure_cloudinary
 
 settings = get_settings()
+configure_cloudinary(settings)
 app = FastAPI(title=settings.app_name)
 app.add_middleware(
     CORSMiddleware,
@@ -57,3 +59,8 @@ def root() -> dict[str, str]:
         "docs": "/docs",
         "health": f"{settings.api_v1_prefix}/health",
     }
+
+
+@app.get("/health")
+def root_health() -> dict[str, str]:
+    return {"status": "ok"}

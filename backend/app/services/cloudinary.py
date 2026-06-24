@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from cloudinary import config as cloudinary_config
+from cloudinary import uploader
+from fastapi import UploadFile
 
 from ..core.config import Settings
 
@@ -17,3 +19,14 @@ def configure_cloudinary(settings: Settings) -> None:
             api_secret=settings.cloudinary_api_secret,
             secure=True,
         )
+
+
+def upload_image(file: UploadFile, *, folder: str = "portfolio") -> dict[str, object]:
+    content = file.file.read()
+    result = uploader.upload(
+        content,
+        resource_type="image",
+        folder=folder,
+        overwrite=False,
+    )
+    return result

@@ -90,3 +90,9 @@ class AdminAuthState(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     ok: bool
+
+
+class MediaUploadResponse(BaseModel):
+    url: str
+    public_id: str | None = None
+    original_filename: str | None = None

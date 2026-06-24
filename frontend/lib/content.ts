@@ -61,7 +61,7 @@ export interface BlogPost {
 }
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
-const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
 export function parsePersonProfile(person: string): PersonProfile {
   const grab = (label: string) => {
@@ -83,8 +83,16 @@ export function parsePersonProfile(person: string): PersonProfile {
   };
 }
 
+function buildApiUrl(path: string): string {
+  if (API_BASE.startsWith("http://") || API_BASE.startsWith("https://")) {
+    return `${API_BASE}${path}`;
+  }
+
+  return new URL(`${API_BASE}${path}`, SITE_BASE).toString();
+}
+
 async function fetchJson<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(buildApiUrl(path), {
     cache: "no-store",
     headers: {
       Accept: "application/json",

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -21,6 +21,7 @@ from ...schemas.admin import (
     TestimonialUpdate,
 )
 from ...schemas.content import ContactMessageRead, ProjectRead, SkillRead, TestimonialRead
+from ...services.cloudinary import upload_image
 from ...services.knowledge import list_knowledge_files, read_text_file
 
 router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin_token)])
@@ -115,6 +116,27 @@ def admin_delete_skill(skill_id: int, db: Session = Depends(get_db)):
 def admin_list_testimonials(db: Session = Depends(get_db)):
     stmt = select(Testimonial).order_by(Testimonial.sort_order.asc(), Testimonial.id.desc())
     return db.scalars(stmt).all()
+
+
+@router.post("/testimonials/avatar", response_model=MediaUploadResponse, status_code=status.HTTP_201_CREATED)
+def admin_upload_testimonial_avatar(file: UploadFile = File(...)):
+    settings = get_settings()
+    if not file.content_type or not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Please upload an image file")
+
+    if not (settings.cloudinary_cloud_name or settings.cloudinary_url):
+        raise HTTPException(status_code=503, detail="Cloudinary is not configured")
+
+    result = upload_image(file, folder=f"{settings.cloudinary_folder}/testimonials")
+    url = result.get("secure_url") or result.get("url")
+    if not url:
+        raise HTTPException(status_code=502, detail="Cloudinary did not return an image URL")
+
+    return MediaUploadResponse(
+        url=str(url),
+        public_id=result.get("public_id"),
+        original_filename=file.filename,
+    )
 
 
 @router.post("/testimonials", response_model=TestimonialRead, status_code=status.HTTP_201_CREATED)
