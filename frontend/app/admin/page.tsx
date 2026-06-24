@@ -532,7 +532,7 @@ export default function AdminPage() {
         {loading ? <p className="text-sm text-[var(--text-muted)]">Loading...</p> : null}
 
         {activeTab === "projects" ? (
-          <section className="grid gap-6 xl:grid-cols-[420px_1fr]">
+          <section className="grid gap-6">
             <form onSubmit={saveProject} className="rounded-[2rem] border border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-lg backdrop-blur-xl">
               <h2 className="font-display text-2xl">Projects</h2>
               <div className="mt-4 grid gap-3">
@@ -578,7 +578,7 @@ export default function AdminPage() {
         ) : null}
 
         {activeTab === "skills" ? (
-          <section className="grid gap-6 xl:grid-cols-[360px_1fr]">
+          <section className="grid gap-6">
             <form onSubmit={saveSkill} className="rounded-[2rem] border border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-lg backdrop-blur-xl">
               <h2 className="font-display text-2xl">Skills</h2>
               <div className="mt-4 grid gap-3">
@@ -610,7 +610,7 @@ export default function AdminPage() {
         ) : null}
 
         {activeTab === "testimonials" ? (
-          <section className="grid gap-6 xl:grid-cols-[420px_1fr]">
+          <section className="grid gap-6">
             <form onSubmit={saveTestimonial} className="rounded-[2rem] border border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-lg backdrop-blur-xl">
               <h2 className="font-display text-2xl">Testimonials</h2>
               <div className="mt-4 grid gap-3">
@@ -772,6 +772,7 @@ export default function AdminPage() {
     </div>
   );
 }
+
 
 
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import BlogList from "../../components/BlogList";
 import { getBlogs } from "../../lib/content";
+import { getLocalBlogPosts } from "./local-posts";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  const posts = await getBlogs();
-  if (!posts.length) {
-    notFound();
-  }
-  return <BlogList posts={posts} />;
+  const posts = await getBlogs().catch(() => getLocalBlogPosts());
+  const safePosts = posts.length ? posts : await getLocalBlogPosts();
+  return <BlogList posts={safePosts} />;
 }
