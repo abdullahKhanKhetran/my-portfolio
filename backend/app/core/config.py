@@ -88,17 +88,21 @@ class Settings(BaseSettings):
             return raw
 
         scheme, remainder = raw.split(scheme_sep, 1)
+        normalized_scheme = scheme
+        if scheme in {"postgres", "postgresql", "postgresql+psycopg2"}:
+            normalized_scheme = "postgresql+psycopg"
+
         if "@" not in remainder:
-            return raw
+            return f"{normalized_scheme}://{remainder}"
 
         credentials, host_part = remainder.rsplit("@", 1)
         if ":" not in credentials:
-            return raw
+            return f"{normalized_scheme}://{remainder}"
 
         username, password = credentials.split(":", 1)
         user_enc = quote_plus(username)
         pass_enc = quote_plus(password)
-        return f"{scheme}://{user_enc}:{pass_enc}@{host_part}"
+        return f"{normalized_scheme}://{user_enc}:{pass_enc}@{host_part}"
 
     def resolve_database_url(self) -> str:
         if self.database_url:
