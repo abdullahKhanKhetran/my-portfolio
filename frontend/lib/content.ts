@@ -35,6 +35,7 @@ export interface PortfolioTestimonial {
 export interface ProfileBundle {
   person: string;
   resume: string;
+  hero_image_url?: string | null;
 }
 
 export interface PersonProfile {

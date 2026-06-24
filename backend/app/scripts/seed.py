@@ -1,78 +1,41 @@
 from __future__ import annotations
 
-from sqlalchemy import select, func
+import json
+from sqlalchemy import func, select
 
+from ..core.config import get_settings
 from ..db.models import Project, Skill
 from ..db.session import SessionLocal
 
-PROJECTS = [
-    {
-        "slug": "ilearn",
-        "title": "ILearn",
-        "summary": "AI-powered student management system with RAG-enabled academic querying.",
-        "role": "Full Stack AI Engineer",
-        "stack": ["React", "MVC", "Supabase", "FastAPI", "RAG", "DeepSeek LLM"],
-        "featured": True,
-        "sort_order": 1,
-    },
-    {
-        "slug": "insightops",
-        "title": "InsightOps",
-        "summary": "MCP-powered incident resolution and debugging assistant.",
-        "role": "Full Stack AI Engineer",
-        "stack": ["Node.js", "FastAPI", "MCP", "Redis", "PostgreSQL", "Docker", "AWS"],
-        "featured": True,
-        "sort_order": 2,
-    },
-    {
-        "slug": "talentforge",
-        "title": "TalentForge",
-        "summary": "AI-powered HR management system with anomaly detection and performance prediction.",
-        "role": "Full Stack AI Engineer",
-        "stack": ["Flutter", "FastAPI", "Django", "PostgreSQL", "Celery", "Redis", "Docker"],
-        "featured": True,
-        "sort_order": 3,
-    },
-    {
-        "slug": "classmind",
-        "title": "ClassMind",
-        "summary": "Academic administration platform with real-time sync and offline-first support.",
-        "role": "Full Stack AI Engineer",
-        "stack": ["Flutter", "Supabase", "PostgreSQL", "Clean Architecture", "BLoC", "Provider"],
-        "featured": True,
-        "sort_order": 4,
-    },
-]
 
-SKILLS = [
-    ("Frontend", "Next.js", 90),
-    ("Frontend", "React", 90),
-    ("Frontend", "Tailwind", 85),
-    ("Backend", "FastAPI", 95),
-    ("Backend", "Django", 90),
-    ("Backend", "PostgreSQL", 90),
-    ("Backend", "Supabase", 90),
-    ("Backend", "Redis", 80),
-    ("Mobile", "Flutter", 95),
-    ("AI", "RAG", 90),
-    ("AI", "MCP", 85),
-    ("AI", "LangChain", 80),
-    ("DevOps", "Docker", 85),
-    ("DevOps", "AWS", 80),
-]
+def _load_seed_data() -> dict[str, list[dict[str, object]]]:
+    settings = get_settings()
+    seed_path = settings.knowledge_dir / "portfolio_seed.json"
+    if not seed_path.exists():
+        return {"projects": [], "skills": []}
+
+    with seed_path.open(encoding="utf-8") as handle:
+        data = json.load(handle)
+
+    return {
+        "projects": list(data.get("projects") or []),
+        "skills": list(data.get("skills") or []),
+    }
 
 
 def seed() -> None:
+    seed_data = _load_seed_data()
+
     with SessionLocal() as db:
         project_count = db.scalar(select(func.count(Project.id))) or 0
         if project_count == 0:
-            db.add_all(Project(**item) for item in PROJECTS)
+            db.add_all(Project(**item) for item in seed_data["projects"])
 
         skill_count = db.scalar(select(func.count(Skill.id))) or 0
         if skill_count == 0:
             db.add_all(
-                Skill(category=category, name=name, proficiency=proficiency, sort_order=index)
-                for index, (category, name, proficiency) in enumerate(SKILLS, start=1)
+                Skill(category=item["category"], name=item["name"], proficiency=item.get("proficiency"), sort_order=index)
+                for index, item in enumerate(seed_data["skills"], start=1)
             )
 
         db.commit()

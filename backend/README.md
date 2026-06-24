@@ -8,6 +8,7 @@ FastAPI backend for the portfolio site, content APIs, and the future AI chat bot
 - SQLAlchemy ORM models for structured app data
 - Alembic migrations for schema changes
 - `knowledge/` markdown files for your personal profile, resume, and project writeups
+- `knowledge/portfolio_seed.json` for structured seed content such as projects, skills, and blog metadata
 
 ## Recommended stack
 
@@ -19,7 +20,7 @@ For this portfolio, the best default is:
 - Gemini 2.5 Flash for the chat assistant
 - Markdown files in `knowledge/` for long-form bio, resume, and chatbot source material
 
-That gives you one clean source of truth for structured records and a separate source of truth for human-authored content.
+That gives you one clean source of truth for structured records and a separate source of truth for human-authored content. Seed data for projects, skills, and blog metadata now lives in `knowledge/portfolio_seed.json` so the startup code does not hardcode portfolio records.
 
 ## Why I recommend PostgreSQL here
 

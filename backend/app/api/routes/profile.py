@@ -18,4 +18,5 @@ def get_profile_bundle() -> dict[str, str]:
     return {
         "person": read_text_file(person),
         "resume": read_text_file(resume),
+        "hero_image_url": settings.hero_image_url or None,
     }

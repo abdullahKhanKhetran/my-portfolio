@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type TabKey = "projects" | "skills" | "testimonials" | "messages" | "knowledge";
 
@@ -81,8 +81,16 @@ type TestimonialForm = {
   sort_order: number;
 };
 
+type CloudinaryUploadResult = {
+  secure_url?: string;
+  url?: string;
+  public_id?: string;
+};
+
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8011/api/v1";
 const TOKEN_STORAGE_KEY = "portfolio-admin-token";
+const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 const TABS: Array<{ key: TabKey; label: string }> = [
   { key: "projects", label: "Projects" },
   { key: "skills", label: "Skills" },
@@ -143,7 +151,8 @@ export default function AdminPage() {
 
   const [testimonialForm, setTestimonialForm] = useState<TestimonialForm>(emptyTestimonialForm);
   const [testimonialEditId, setTestimonialEditId] = useState<number | null>(null);
-
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
 
   const [knowledgePath, setKnowledgePath] = useState("person.md");
   const [knowledgeDraft, setKnowledgeDraft] = useState("");
@@ -236,6 +245,50 @@ export default function AdminPage() {
     const doc = await apiFetch(`/admin/knowledge/${encodeURIComponent(path)}`);
     setCurrentKnowledge(doc);
     setKnowledgeDraft(doc.content);
+  }
+
+  async function uploadAvatar(file: File) {
+    if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+      throw new Error("Cloudinary upload settings are missing in frontend/.env");
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    setIsUploadingAvatar(true);
+    setStatus("Uploading testimonial avatar...");
+
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const payload = (await response.json()) as CloudinaryUploadResult;
+      if (!response.ok) {
+        throw new Error(payload?.secure_url ? "Upload failed" : "Cloudinary upload failed");
+      }
+
+      const uploadedUrl = payload.secure_url ?? payload.url;
+      if (!uploadedUrl) {
+        throw new Error("Cloudinary did not return an image URL");
+      }
+
+      setTestimonialForm((current) => ({ ...current, avatar_url: uploadedUrl }));
+      setStatus("Testimonial avatar uploaded.");
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  }
+
+  async function handleAvatarFile(file: File | null) {
+    if (!file) return;
+    try {
+      await uploadAvatar(file);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Failed to upload avatar");
+    }
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -538,7 +591,47 @@ export default function AdminPage() {
                 <input value={testimonialForm.author_role} onChange={(e) => setTestimonialForm({ ...testimonialForm, author_role: e.target.value })} className="rounded-2xl border border-[var(--card-border)] bg-white/80 px-4 py-3 text-sm dark:bg-black/30" placeholder="author role" />
                 <input value={testimonialForm.company} onChange={(e) => setTestimonialForm({ ...testimonialForm, company: e.target.value })} className="rounded-2xl border border-[var(--card-border)] bg-white/80 px-4 py-3 text-sm dark:bg-black/30" placeholder="company" />
                 <textarea value={testimonialForm.quote} onChange={(e) => setTestimonialForm({ ...testimonialForm, quote: e.target.value })} className="min-h-32 rounded-2xl border border-[var(--card-border)] bg-white/80 px-4 py-3 text-sm dark:bg-black/30" placeholder="quote" />
-                <input value={testimonialForm.avatar_url} onChange={(e) => setTestimonialForm({ ...testimonialForm, avatar_url: e.target.value })} className="rounded-2xl border border-[var(--card-border)] bg-white/80 px-4 py-3 text-sm dark:bg-black/30" placeholder="avatar url" />
+                <div
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    void handleAvatarFile(e.dataTransfer.files?.[0] ?? null);
+                  }}
+                  className="rounded-3xl border border-dashed border-[var(--card-border)] bg-white/70 p-4 dark:bg-black/20"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">Avatar upload</p>
+                      <p className="text-xs text-[var(--text-muted)]">Drop an image here or browse from your device.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => avatarInputRef.current?.click()}
+                      className="rounded-full border border-[var(--card-border)] px-4 py-2 text-xs transition hover:bg-black/5 dark:hover:bg-white/10"
+                      disabled={isUploadingAvatar}
+                    >
+                      {isUploadingAvatar ? "Uploading..." : "Browse"}
+                    </button>
+                  </div>
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => void handleAvatarFile(e.target.files?.[0] ?? null)}
+                  />
+                  {testimonialForm.avatar_url ? (
+                    <div className="mt-4 flex items-center gap-3 rounded-2xl border border-[var(--card-border)] bg-white/80 p-3 dark:bg-black/30">
+                      <img src={testimonialForm.avatar_url} alt="testimonial avatar preview" className="h-14 w-14 rounded-2xl object-cover" />
+                      <div className="min-w-0">
+                        <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-muted)]">Uploaded URL</p>
+                        <p className="truncate text-sm">{testimonialForm.avatar_url}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-xs text-[var(--text-muted)]">No avatar uploaded yet.</p>
+                  )}
+                </div>
                 <input type="number" value={testimonialForm.sort_order} onChange={(e) => setTestimonialForm({ ...testimonialForm, sort_order: Number(e.target.value) })} className="rounded-2xl border border-[var(--card-border)] bg-white/80 px-4 py-3 text-sm dark:bg-black/30" placeholder="sort order" />
               </div>
               <div className="mt-5 flex gap-3">
@@ -548,6 +641,23 @@ export default function AdminPage() {
             </form>
 
             <div className="grid gap-4">
+              <div className="rounded-[2rem] border border-[var(--card-border)] bg-[var(--card-bg)] p-5 shadow-lg backdrop-blur-xl">
+                <p className="text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">Current preview</p>
+                <div className="mt-4 flex items-center gap-4">
+                  <div className="h-20 w-20 overflow-hidden rounded-3xl border border-[var(--card-border)] bg-black/5">
+                    {testimonialForm.avatar_url ? (
+                      <img src={testimonialForm.avatar_url} alt="testimonial preview" className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-xs text-[var(--text-muted)]">Preview</div>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-semibold">{testimonialForm.author_name || "Preview name"}</h3>
+                    <p className="text-sm text-[var(--text-muted)]">{testimonialForm.author_role || "Role"}{testimonialForm.company ? ` • ${testimonialForm.company}` : ""}</p>
+                    <p className="mt-2 text-sm text-[var(--text-body)] line-clamp-3">{testimonialForm.quote || "Your testimonial text will appear here after upload and form entry."}</p>
+                  </div>
+                </div>
+              </div>
               {testimonials.map((testimonial) => (
                 <article key={testimonial.id} className="rounded-[1.75rem] border border-[var(--card-border)] bg-[var(--card-bg)] p-5 shadow-lg backdrop-blur-xl">
                   <p className="text-sm text-[var(--text-body)]">{testimonial.quote}</p>

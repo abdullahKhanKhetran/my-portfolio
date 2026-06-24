@@ -22,7 +22,7 @@ export default async function Home() {
   return (
     <>
       <AnimatedSection id="home" parallaxOffset={0}>
-        <HeroSection profile={profile} />
+        <HeroSection profile={profile} heroImageUrl={profileBundle.hero_image_url?.trim() || undefined} />
       </AnimatedSection>
       <AnimatedSection id="portfolio" parallaxOffset={20}>
         <PortfolioSection projects={projects} />

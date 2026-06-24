@@ -1,0 +1,69 @@
+{
+  "projects": [
+    {
+      "slug": "ilearn",
+      "title": "ILearn",
+      "summary": "AI-powered student management system with RAG-enabled academic querying.",
+      "role": "Full Stack AI Engineer",
+      "stack": ["React", "MVC", "Supabase", "FastAPI", "RAG", "DeepSeek LLM"],
+      "featured": true,
+      "sort_order": 1
+    },
+    {
+      "slug": "insightops",
+      "title": "InsightOps",
+      "summary": "MCP-powered incident resolution and debugging assistant.",
+      "role": "Full Stack AI Engineer",
+      "stack": ["Node.js", "FastAPI", "MCP", "Redis", "PostgreSQL", "Docker", "AWS"],
+      "featured": true,
+      "sort_order": 2
+    },
+    {
+      "slug": "talentforge",
+      "title": "TalentForge",
+      "summary": "AI-powered HR management system with anomaly detection and performance prediction.",
+      "role": "Full Stack AI Engineer",
+      "stack": ["Flutter", "FastAPI", "Django", "PostgreSQL", "Celery", "Redis", "Docker"],
+      "featured": true,
+      "sort_order": 3
+    },
+    {
+      "slug": "classmind",
+      "title": "ClassMind",
+      "summary": "Academic administration platform with real-time sync and offline-first support.",
+      "role": "Full Stack AI Engineer",
+      "stack": ["Flutter", "Supabase", "PostgreSQL", "Clean Architecture", "BLoC", "Provider"],
+      "featured": true,
+      "sort_order": 4
+    }
+  ],
+  "skills": [
+    { "category": "Frontend", "name": "Next.js", "proficiency": 90 },
+    { "category": "Frontend", "name": "React", "proficiency": 90 },
+    { "category": "Frontend", "name": "Tailwind", "proficiency": 85 },
+    { "category": "Backend", "name": "FastAPI", "proficiency": 95 },
+    { "category": "Backend", "name": "Django", "proficiency": 90 },
+    { "category": "Backend", "name": "PostgreSQL", "proficiency": 90 },
+    { "category": "Backend", "name": "Supabase", "proficiency": 90 },
+    { "category": "Backend", "name": "Redis", "proficiency": 80 },
+    { "category": "Mobile", "name": "Flutter", "proficiency": 95 },
+    { "category": "AI", "name": "RAG", "proficiency": 90 },
+    { "category": "AI", "name": "MCP", "proficiency": 85 },
+    { "category": "AI", "name": "LangChain", "proficiency": 80 },
+    { "category": "DevOps", "name": "Docker", "proficiency": 85 },
+    { "category": "DevOps", "name": "AWS", "proficiency": 80 }
+  ],
+  "blogs": [
+    {
+      "slug": "testing-claude-fable-5-on-a-real-project",
+      "title": "Testing Claude Fable 5 on a Real Project: ARIC",
+      "excerpt": "Benchmarks and greenfield demos measure raw generation. I wanted to know how Fable 5 behaves when dropped into an existing codebase with real constraints — so I let it loose on ARIC, my MCP-based agent project.",
+      "date": "2026-06-12",
+      "display_date": "June 12, 2026",
+      "read_time": "7 min read",
+      "tags": ["AI", "Claude", "Agents", "MCP", "Dev Tools"],
+      "cover": "/blogs/Testing%20fable%205/OIF.webp",
+      "content_path": "blogs/testing-claude-fable-5.md"
+    }
+  ]
+}

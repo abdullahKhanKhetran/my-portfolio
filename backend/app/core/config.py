@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     cloudinary_url: str | None = None
     cloudinary_upload_preset: str | None = None
     cloudinary_folder: str = "portfolio"
+    hero_image_url: str | None = None
 
     redis_url: str | None = None
     image_cache_ttl_seconds: int = 60 * 60 * 24 * 30
@@ -99,6 +100,12 @@ class Settings(BaseSettings):
         return f"{scheme}://{user_enc}:{pass_enc}@{host_part}"
 
     def resolve_database_url(self) -> str:
+        if self.database_url:
+            return self._sanitize_database_url(self.database_url)
+
+        if self.supabase_db_url:
+            return self._sanitize_database_url(self.supabase_db_url)
+
         if self.supabase_db_host and self.supabase_db_password:
             user = quote_plus(self.supabase_db_user)
             password = quote_plus(self.supabase_db_password)
@@ -110,12 +117,6 @@ class Settings(BaseSettings):
                 f"postgresql+psycopg://{user}:{password}@{host}:{port}/{name}"
                 f"?sslmode={sslmode}"
             )
-
-        if self.database_url:
-            return self._sanitize_database_url(self.database_url)
-
-        if self.supabase_db_url:
-            return self._sanitize_database_url(self.supabase_db_url)
 
         if self.environment.lower() == "production":
             raise RuntimeError("A DATABASE_URL or SUPABASE_DB_URL is required in production")
