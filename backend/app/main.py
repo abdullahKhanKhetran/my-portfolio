@@ -18,7 +18,6 @@ from .db.session import engine
 from .scripts.seed import seed as seed_portfolio
 
 settings = get_settings()
-
 app = FastAPI(title=settings.app_name)
 app.add_middleware(
     CORSMiddleware,
@@ -43,6 +42,10 @@ app.include_router(admin_router, prefix=settings.api_v1_prefix)
 
 @app.on_event("startup")
 def startup() -> None:
+    # Vercel serverless functions are ephemeral, so we skip local bootstrap work there.
+    if settings.vercel or settings.environment.lower() == "production":
+        return
+
     Base.metadata.create_all(bind=engine)
     seed_portfolio()
 

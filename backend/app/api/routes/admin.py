@@ -194,8 +194,16 @@ def admin_get_knowledge_file(doc_path: str):
 
 @router.put("/knowledge/{doc_path:path}", response_model=KnowledgeFileRead)
 def admin_update_knowledge_file(doc_path: str, payload: KnowledgeUpdate):
+    settings = get_settings()
+    if settings.vercel or settings.environment.lower() == "production":
+        raise HTTPException(
+            status_code=501,
+            detail="Knowledge file editing is disabled on Vercel. Use a persistent storage backend for writable content.",
+        )
+
     target = _resolve_knowledge_path(doc_path)
     if not target.exists() or not target.is_file():
         raise HTTPException(status_code=404, detail="Document not found")
     target.write_text(payload.content, encoding="utf-8")
     return KnowledgeFileRead(path=doc_path, content=payload.content)
+

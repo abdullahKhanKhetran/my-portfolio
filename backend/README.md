@@ -44,7 +44,9 @@ This backend is set up to stay stateless on Vercel:
 - knowledge is read from markdown files only
 - Gemini requests are stateless and sent with `store: false`
 
-If `VERCEL=1` or `ENVIRONMENT=production` is set, the app requires `DATABASE_URL` or `SUPABASE_DB_URL` and will refuse to start without one.
+If VERCEL=1 or ENVIRONMENT=production is set, the app requires DATABASE_URL or SUPABASE_DB_URL and will refuse to start without one.
+
+On Vercel, the /admin/knowledge/* update endpoint is intentionally disabled because the serverless filesystem is not persistent. If you want writable knowledge content in production, move that content to a database or object storage layer first.
 
 ## Database and migrations
 
@@ -121,3 +123,4 @@ uvicorn app.main:app --reload --port 8000
 ## Notes for the chatbot
 
 Keep the markdown files short, factual, and easy to chunk. When you add a project, prefer one file per project so retrieval stays clean.
+

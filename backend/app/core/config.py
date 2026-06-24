@@ -43,6 +43,7 @@ class Settings(BaseSettings):
 
     redis_url: str | None = None
     image_cache_ttl_seconds: int = 60 * 60 * 24 * 30
+    vercel: bool = False
 
     model_config = SettingsConfigDict(
         env_file=(".env", "backend/.env"),
