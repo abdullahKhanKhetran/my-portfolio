@@ -44,3 +44,4 @@ def seed() -> None:
 if __name__ == "__main__":
     seed()
     print("Seeded portfolio data.")
+

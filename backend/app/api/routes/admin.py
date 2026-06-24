@@ -13,6 +13,7 @@ from ...schemas.admin import (
     ContactMessageUpdate,
     KnowledgeFileRead,
     KnowledgeUpdate,
+    MediaUploadResponse,
     ProjectCreate,
     ProjectUpdate,
     SkillCreate,
@@ -228,4 +229,5 @@ def admin_update_knowledge_file(doc_path: str, payload: KnowledgeUpdate):
         raise HTTPException(status_code=404, detail="Document not found")
     target.write_text(payload.content, encoding="utf-8")
     return KnowledgeFileRead(path=doc_path, content=payload.content)
+
 

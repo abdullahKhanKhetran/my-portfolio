@@ -48,6 +48,10 @@ def startup() -> None:
     if settings.vercel or settings.environment.lower() == "production":
         return
 
+    from .db.base import Base
+    from .db.session import engine
+    from .scripts.seed import seed as seed_portfolio
+
     Base.metadata.create_all(bind=engine)
     seed_portfolio()
 
@@ -64,3 +68,4 @@ def root() -> dict[str, str]:
 @app.get("/health")
 def root_health() -> dict[str, str]:
     return {"status": "ok"}
+
