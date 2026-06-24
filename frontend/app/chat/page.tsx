@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
@@ -68,9 +68,17 @@ export default function ChatPage() {
   const socketRef = useRef<WebSocket | null>(null);
   const pendingOpenRef = useRef<Promise<WebSocket | null> | null>(null);
   const listEndRef = useRef<HTMLDivElement | null>(null);
-  const wsUrl = useMemo(buildWsUrl, []);
+  const [wsUrl, setWsUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    setWsUrl(buildWsUrl());
+  }, []);
+
+  useEffect(() => {
+    if (!wsUrl) {
+      return;
+    }
+
     const connect = () => {
       if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
         return Promise.resolve(socketRef.current);
