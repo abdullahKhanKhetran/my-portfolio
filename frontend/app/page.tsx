@@ -10,12 +10,20 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Home() {
-  const [projects, skills, testimonials, profileBundle] = await Promise.all([
+  const [projectsResult, skillsResult, testimonialsResult, profileResult] = await Promise.allSettled([
     getProjects(),
     getSkills(),
     getTestimonials(),
     getProfileBundle(),
   ]);
+
+  const projects = projectsResult.status === "fulfilled" ? projectsResult.value : [];
+  const skills = skillsResult.status === "fulfilled" ? skillsResult.value : [];
+  const testimonials = testimonialsResult.status === "fulfilled" ? testimonialsResult.value : [];
+  const profileBundle =
+    profileResult.status === "fulfilled"
+      ? profileResult.value
+      : { person: "", resume: "", hero_image_url: null };
 
   const profile = parsePersonProfile(profileBundle.person);
 
@@ -39,3 +47,4 @@ export default async function Home() {
     </>
   );
 }
+
