@@ -6,6 +6,7 @@ from sqlalchemy import func, select
 from ..core.config import get_settings
 from ..db.models import Project, Skill
 from ..db.session import SessionLocal
+from .db_maintenance import sync_postgres_sequences
 
 
 def _load_seed_data() -> dict[str, list[dict[str, object]]]:
@@ -39,9 +40,11 @@ def seed() -> None:
             )
 
         db.commit()
+        if db.bind and getattr(db.bind.dialect, "name", "") == "postgresql":
+            sync_postgres_sequences(db)
+            db.commit()
 
 
 if __name__ == "__main__":
     seed()
     print("Seeded portfolio data.")
-
