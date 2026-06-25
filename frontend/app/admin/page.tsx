@@ -81,7 +81,7 @@ type TestimonialForm = {
   sort_order: number;
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
+const API_BASE = "/api/v1";
 const TOKEN_STORAGE_KEY = "portfolio-admin-token";
 
 

@@ -60,8 +60,7 @@ export interface BlogPost {
   content: string;
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api/v1";
-const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+const BACKEND_API_BASE = process.env.BACKEND_API_BASE_URL;
 
 export function parsePersonProfile(person: string): PersonProfile {
   const grab = (label: string) => {
@@ -84,11 +83,15 @@ export function parsePersonProfile(person: string): PersonProfile {
 }
 
 function buildApiUrl(path: string): string {
-  if (API_BASE.startsWith("http://") || API_BASE.startsWith("https://")) {
-    return `${API_BASE}${path}`;
+  if (!BACKEND_API_BASE) {
+    throw new Error("BACKEND_API_BASE_URL is not configured.");
   }
 
-  return new URL(`${API_BASE}${path}`, SITE_BASE).toString();
+  if (!BACKEND_API_BASE.startsWith("http://") && !BACKEND_API_BASE.startsWith("https://")) {
+    throw new Error("BACKEND_API_BASE_URL must be an absolute http(s) URL.");
+  }
+
+  return `${BACKEND_API_BASE.replace(/\/$/, "")}/api/v1${path}`;
 }
 
 async function fetchJson<T>(path: string): Promise<T> {
@@ -118,13 +121,17 @@ export function proxiedImageUrl(url?: string | null): string | null {
   return `/api/media/proxy?url=${encodeURIComponent(url)}`;
 }
 
-export function absoluteProxiedImageUrl(url?: string | null): string | null {
+export function absoluteProxiedImageUrl(url?: string | null, baseUrl?: string): string | null {
   const proxied = proxiedImageUrl(url);
   if (!proxied) {
     return null;
   }
 
-  return new URL(proxied, SITE_BASE).toString();
+  if (!baseUrl) {
+    return proxied;
+  }
+
+  return new URL(proxied, baseUrl).toString();
 }
 
 export async function getProjects() {

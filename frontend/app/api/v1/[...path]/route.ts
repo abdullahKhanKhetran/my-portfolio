@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-const BACKEND_API_BASE = process.env.BACKEND_API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL;
+const BACKEND_API_BASE = process.env.BACKEND_API_BASE_URL;
 
 export const dynamic = "force-dynamic";
 
@@ -8,10 +8,21 @@ function isLocalhostUrl(value: string) {
   return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(value);
 }
 
+function isAbsoluteHttpUrl(value: string) {
+  return /^https?:\/\//i.test(value);
+}
+
 async function proxy(request: NextRequest, pathname: string) {
   if (!BACKEND_API_BASE) {
     return Response.json(
       { detail: "BACKEND_API_BASE_URL is not configured for this deployment." },
+      { status: 500 },
+    );
+  }
+
+  if (!isAbsoluteHttpUrl(BACKEND_API_BASE)) {
+    return Response.json(
+      { detail: "BACKEND_API_BASE_URL must be an absolute http(s) URL, for example https://my-backend.vercel.app." },
       { status: 500 },
     );
   }
