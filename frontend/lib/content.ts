@@ -60,7 +60,117 @@ export interface BlogPost {
   content: string;
 }
 
-const BACKEND_API_BASE = process.env.BACKEND_API_BASE_URL;
+export const LOCAL_PROFILE_BUNDLE: ProfileBundle = {
+  person: `# Person
+
+## Basics
+- Name: Muhammad Abdullah Khan
+- Location: Islamabad, Pakistan
+- Role: Full Stack AI Engineer
+- Email: abdullahkhitran2005@gmail.com
+- LinkedIn: https://www.linkedin.com/in/abdullah-khan-845607362
+- GitHub: https://github.com/abdullahKhanKhetran
+
+## About Me
+I am a Full Stack AI Engineer who builds production-ready applications that combine intelligent automation with solid backend and mobile architecture. I enjoy working across the stack, especially on products that need FastAPI, Django, PostgreSQL, Supabase, Flutter, and modern frontend tools like Next.js and React.
+
+I like solving real-world problems with AI, RAG pipelines, embeddings, vector search, MCP-based tooling, and clean API design. My focus is on building systems that are scalable, reliable, and easy to maintain in production.
+`,
+  resume: `Full Stack AI Engineer focused on backend systems, mobile apps, and AI-assisted product engineering. Experienced with FastAPI, Django, PostgreSQL, Supabase, Flutter, React, Next.js, Redis, Docker, AWS, MCP, and RAG workflows.`,
+  hero_image_url: "/my_pictures/side_pose.jpg",
+};
+
+export const LOCAL_PROJECTS: PortfolioProject[] = [
+  {
+    id: 1,
+    slug: "ilearn",
+    title: "ILearn",
+    summary: "AI-powered student management system with RAG-enabled academic querying.",
+    role: "Full Stack AI Engineer",
+    stack: ["React", "MVC", "Supabase", "FastAPI", "RAG", "DeepSeek LLM"],
+    live_url: null,
+    repo_url: null,
+    cover_image_url: "/app_icons/ilearn_icon.png",
+    featured: true,
+    sort_order: 1,
+    created_at: "2026-06-24T00:00:00.000Z",
+  },
+  {
+    id: 2,
+    slug: "insightops",
+    title: "InsightOps",
+    summary: "MCP-powered incident resolution and debugging assistant.",
+    role: "Full Stack AI Engineer",
+    stack: ["Node.js", "FastAPI", "MCP", "Redis", "PostgreSQL", "Docker", "AWS"],
+    live_url: null,
+    repo_url: null,
+    cover_image_url: "/app_icons/insightops_icon.png",
+    featured: true,
+    sort_order: 2,
+    created_at: "2026-06-24T00:00:00.000Z",
+  },
+  {
+    id: 3,
+    slug: "talentforge",
+    title: "TalentForge",
+    summary: "AI-powered HR management system with anomaly detection and performance prediction.",
+    role: "Full Stack AI Engineer",
+    stack: ["Flutter", "FastAPI", "Django", "PostgreSQL", "Celery", "Redis", "Docker"],
+    live_url: null,
+    repo_url: null,
+    cover_image_url: "/app_icons/alnoor_cloth_house_icon.png",
+    featured: true,
+    sort_order: 3,
+    created_at: "2026-06-24T00:00:00.000Z",
+  },
+  {
+    id: 4,
+    slug: "classmind",
+    title: "ClassMind",
+    summary: "Academic administration platform with real-time sync and offline-first support.",
+    role: "Full Stack Engineer",
+    stack: ["Flutter", "Supabase", "PostgreSQL", "Clean Architecture", "BLoC", "Provider"],
+    live_url: null,
+    repo_url: null,
+    cover_image_url: "/app_icons/class_mind_icon.png",
+    featured: true,
+    sort_order: 4,
+    created_at: "2026-06-24T00:00:00.000Z",
+  },
+  {
+    id: 5,
+    slug: "welogs",
+    title: "Welogs",
+    summary: "Supabase-backed Flutter blogging app with clean architecture, BLoC, and personalized feeds.",
+    role: "Mobile App Engineer",
+    stack: ["Flutter", "Supabase", "Clean Architecture", "BLoC", "Multi-user", "Personalized Feed"],
+    live_url: null,
+    repo_url: null,
+    cover_image_url: "/app_icons/welogs_icon.png",
+    featured: true,
+    sort_order: 5,
+    created_at: "2026-06-24T00:00:00.000Z",
+  },
+];
+
+export const LOCAL_SKILLS: PortfolioSkill[] = [
+  { id: 1, category: "Frontend", name: "Next.js", proficiency: 90, sort_order: 1 },
+  { id: 2, category: "Frontend", name: "React", proficiency: 90, sort_order: 2 },
+  { id: 3, category: "Frontend", name: "Tailwind", proficiency: 85, sort_order: 3 },
+  { id: 4, category: "Backend", name: "FastAPI", proficiency: 95, sort_order: 4 },
+  { id: 5, category: "Backend", name: "Django", proficiency: 90, sort_order: 5 },
+  { id: 6, category: "Backend", name: "PostgreSQL", proficiency: 90, sort_order: 6 },
+  { id: 7, category: "Backend", name: "Redis", proficiency: 80, sort_order: 7 },
+  { id: 8, category: "Backend", name: "Supabase", proficiency: 90, sort_order: 8 },
+  { id: 9, category: "Mobile", name: "Flutter", proficiency: 95, sort_order: 9 },
+  { id: 10, category: "AI", name: "RAG", proficiency: 90, sort_order: 10 },
+  { id: 11, category: "AI", name: "MCP", proficiency: 85, sort_order: 11 },
+  { id: 12, category: "AI", name: "LangChain", proficiency: 80, sort_order: 12 },
+  { id: 13, category: "DevOps", name: "Docker", proficiency: 85, sort_order: 13 },
+  { id: 14, category: "DevOps", name: "AWS", proficiency: 80, sort_order: 14 },
+];
+
+export const LOCAL_TESTIMONIALS: PortfolioTestimonial[] = [];
 
 export function parsePersonProfile(person: string): PersonProfile {
   const grab = (label: string) => {
@@ -80,33 +190,6 @@ export function parsePersonProfile(person: string): PersonProfile {
     github: grab("GitHub"),
     about,
   };
-}
-
-function buildApiUrl(path: string): string {
-  if (!BACKEND_API_BASE) {
-    throw new Error("BACKEND_API_BASE_URL is not configured.");
-  }
-
-  if (!BACKEND_API_BASE.startsWith("http://") && !BACKEND_API_BASE.startsWith("https://")) {
-    throw new Error("BACKEND_API_BASE_URL must be an absolute http(s) URL.");
-  }
-
-  return `${BACKEND_API_BASE.replace(/\/$/, "")}/api/v1${path}`;
-}
-
-async function fetchJson<T>(path: string): Promise<T> {
-  const response = await fetch(buildApiUrl(path), {
-    cache: "no-store",
-    headers: {
-      Accept: "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${path}: ${response.status} ${response.statusText}`);
-  }
-
-  return response.json() as Promise<T>;
 }
 
 export function proxiedImageUrl(url?: string | null): string | null {
@@ -135,7 +218,7 @@ export function absoluteProxiedImageUrl(url?: string | null, baseUrl?: string): 
 }
 
 export async function getProjects() {
-  return fetchJson<PortfolioProject[]>("/projects");
+  return LOCAL_PROJECTS;
 }
 
 export async function getProjectBySlug(slug: string) {
@@ -144,22 +227,13 @@ export async function getProjectBySlug(slug: string) {
 }
 
 export async function getSkills() {
-  return fetchJson<PortfolioSkill[]>("/skills");
+  return LOCAL_SKILLS;
 }
 
 export async function getTestimonials() {
-  return fetchJson<PortfolioTestimonial[]>("/testimonials");
+  return LOCAL_TESTIMONIALS;
 }
 
 export async function getProfileBundle() {
-  return fetchJson<ProfileBundle>("/profile");
-}
-
-export async function getBlogs() {
-  return fetchJson<BlogPost[]>("/blogs");
-}
-
-export async function getBlogBySlug(slug: string) {
-  const blogs = await getBlogs();
-  return blogs.find((blog) => blog.slug === slug);
+  return LOCAL_PROFILE_BUNDLE;
 }

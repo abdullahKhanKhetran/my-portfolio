@@ -65,7 +65,7 @@ export default function SkillsSection({ skills, isVisible = false }: { skills: P
           Skills & Expertise
         </h2>
         <p className="text-center text-zinc-500 mb-16 text-sm tracking-widest uppercase">
-          Live from Supabase
+          Local data from the repo
         </p>
 
         <motion.div
@@ -163,3 +163,4 @@ export default function SkillsSection({ skills, isVisible = false }: { skills: P
     </section>
   );
 }
+

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import BlogDetail from "../../../components/BlogDetail";
-import { absoluteProxiedImageUrl, getBlogBySlug } from "../../../lib/content";
+import { absoluteProxiedImageUrl } from "../../../lib/content";
 import { getLocalBlogPost } from "../local-posts";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +20,7 @@ async function getRequestOrigin() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = (await getBlogBySlug(slug).catch(() => undefined)) ?? (await getLocalBlogPost(slug));
+  const post = await getLocalBlogPost(slug);
   const origin = await getRequestOrigin();
   const cover = post ? absoluteProxiedImageUrl(post.cover, origin) : null;
 
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = (await getBlogBySlug(slug).catch(() => undefined)) ?? (await getLocalBlogPost(slug));
+  const post = await getLocalBlogPost(slug);
 
   if (!post) {
     throw new Error("Blog post not found");

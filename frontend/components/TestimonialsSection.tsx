@@ -155,12 +155,12 @@ export default function TestimonialsSection({ testimonials, isVisible = false }:
           What People Say
         </h2>
         <p className="text-center text-zinc-500 mb-16 text-sm tracking-widest uppercase">
-          Live from Supabase
+          Local notes from the repo
         </p>
 
         {visibleTestimonials.length === 0 ? (
           <div className="mx-auto max-w-2xl rounded-[2rem] border border-zinc-900/10 bg-zinc-900/5 px-6 py-10 text-center text-zinc-600 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400">
-            No testimonials yet. Add some in Supabase and they will appear here.
+            Testimonials will appear here once they are added to the local site data.
           </div>
         ) : (
           <>
@@ -223,3 +223,4 @@ export default function TestimonialsSection({ testimonials, isVisible = false }:
     </section>
   );
 }
+

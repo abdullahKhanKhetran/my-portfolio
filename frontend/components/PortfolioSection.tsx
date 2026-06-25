@@ -58,18 +58,13 @@ const CarouselCard = memo(function CarouselCard({ project, glow, offset, onClick
         position: "relative",
       }}
     >
-      <div className="absolute inset-0 opacity-[0.08] blur-2xl scale-110 z-0">
-        {getProjectImage(project) ? (
-          <Image src={getProjectImage(project)!} alt="" fill unoptimized style={{ objectFit: "cover" }} />
-        ) : (
-          <div
-            className="h-full w-full"
-            style={{
-              background: `radial-gradient(circle at 20% 20%, ${glow}66, transparent 40%), radial-gradient(circle at 80% 0%, ${glow}33, transparent 30%), linear-gradient(180deg, rgba(255,255,255,0.1), rgba(0,0,0,0.05))`,
-            }}
-          />
-        )}
-      </div>
+      <div
+        className="absolute inset-0 blur-2xl scale-110 z-0"
+        style={{
+          opacity: 0.08,
+          background: `radial-gradient(circle at 20% 20%, ${glow}66, transparent 38%), radial-gradient(circle at 80% 0%, ${glow}33, transparent 28%), linear-gradient(180deg, rgba(255,255,255,0.1), rgba(0,0,0,0.05))`,
+        }}
+      />
 
       <div className="relative z-10 flex h-full flex-col gap-3">
         <div
@@ -82,15 +77,25 @@ const CarouselCard = memo(function CarouselCard({ project, glow, offset, onClick
             border: `1px solid ${glow}40`,
             flexShrink: 0,
             position: "relative",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: glow,
-            fontWeight: 700,
-            fontSize: "1.1rem",
           }}
         >
-          {project.title.slice(0, 2).toUpperCase()}
+          {getProjectImage(project) ? (
+            <Image
+              src={getProjectImage(project)!}
+              alt={`${project.title} icon`}
+              fill
+              unoptimized
+              sizes="64px"
+              style={{ objectFit: "contain", padding: 10 }}
+            />
+          ) : (
+            <div
+              className="flex h-full w-full items-center justify-center"
+              style={{ color: glow, fontWeight: 700, fontSize: "1.1rem" }}
+            >
+              {project.title.slice(0, 2).toUpperCase()}
+            </div>
+          )}
         </div>
 
         <div>
@@ -191,7 +196,7 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)" }}>
               Featured Projects
             </h2>
-            <p className="text-zinc-500 text-sm mt-1 tracking-widest uppercase">Live data from Supabase</p>
+            <p className="text-zinc-500 text-sm mt-1 tracking-widest uppercase">Local project data from the repo</p>
           </div>
 
           <div className="flex items-center gap-1 p-1 rounded-xl border border-zinc-900/10 bg-zinc-900/5 dark:border-white/10 dark:bg-white/5">
@@ -301,17 +306,30 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
                     (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                   }}
                 >
-                  <div className="absolute inset-0 opacity-[0.08] blur-lg scale-110 z-0">
-                    {project.cover_image_url ? (
-                      <Image src={proxiedImageUrl(project.cover_image_url) ?? ""} alt="" fill unoptimized style={{ objectFit: "cover" }} />
-                    ) : (
-                      <div className="h-full w-full" style={{ background: `linear-gradient(135deg, ${PROJECT_GLOWS[index % PROJECT_GLOWS.length]}25, transparent)` }} />
-                    )}
-                  </div>
+                  <div
+                    className="absolute inset-0 blur-lg scale-110 z-0"
+                    style={{
+                      opacity: 0.06,
+                      background: `linear-gradient(135deg, ${PROJECT_GLOWS[index % PROJECT_GLOWS.length]}22, transparent 60%), radial-gradient(circle at 20% 20%, ${PROJECT_GLOWS[index % PROJECT_GLOWS.length]}22, transparent 35%)`,
+                    }}
+                  />
 
                   <div className="relative z-10 w-full flex flex-col gap-3">
-                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-zinc-900/10 dark:bg-white/10 relative flex-shrink-0 group-hover:scale-110 transition-transform duration-300 flex items-center justify-center font-bold text-lg text-zinc-900 dark:text-white">
-                      {project.title.slice(0, 1)}
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-zinc-900/10 dark:bg-white/10 relative flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                      {project.cover_image_url ? (
+                        <Image
+                          src={proxiedImageUrl(project.cover_image_url) ?? ""}
+                          alt={`${project.title} icon`}
+                          fill
+                          unoptimized
+                          sizes="64px"
+                          style={{ objectFit: "contain", padding: 10 }}
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center font-bold text-lg text-zinc-900 dark:text-white">
+                          {project.title.slice(0, 1)}
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -343,3 +361,6 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
     </section>
   );
 }
+
+
+

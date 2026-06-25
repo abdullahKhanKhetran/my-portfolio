@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "../components/CustomCursor";
 import Navbar from "../components/Navbar";
 import GlobalBackground from "../components/GlobalBackground";
 import PageTransitionWrapper from "../components/PageTransitionWrapper";
 import LoadingScreen from "../components/LoadingScreen";
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: "Abdullah Khan - Full Stack Developer | Portfolio",
@@ -38,7 +31,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`min-h-screen ${spaceGrotesk.variable}`}>
+      <body className="min-h-screen">
         <LoadingScreen />
         <GlobalBackground />
         <Navbar />

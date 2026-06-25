@@ -3,8 +3,6 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-const API_BASE = "/api/v1";
-
 type ChatRole = "user" | "assistant";
 
 type ChatLine = {
@@ -13,34 +11,13 @@ type ChatLine = {
   pending?: boolean;
 };
 
-type StreamEvent =
-  | { type: "start" }
-  | { type: "delta"; text: string }
-  | { type: "done"; answer: string; interaction_id?: string | null }
-  | { type: "error"; message: string };
-
-function buildWsUrl() {
-  if (API_BASE.startsWith("http://") || API_BASE.startsWith("https://")) {
-    const url = new URL(API_BASE.endsWith("/") ? API_BASE : `${API_BASE}/`);
-    url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
-    url.pathname = `${url.pathname.replace(/\/$/, "")}/chat/ws`;
-    return url.toString();
-  }
-
-  const base = API_BASE.endsWith("/") ? API_BASE : `${API_BASE}/`;
-  const url = new URL(base, window.location.origin);
-  url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
-  url.pathname = `${url.pathname.replace(/\/$/, "")}/chat/ws`;
-  return url.toString();
-}
-
 async function fetchChatResponse(payload: {
   message: string;
   history: Array<{ role: ChatRole; content: string }>;
   previous_interaction_id: string | null;
   temperature: number;
 }) {
-  const response = await fetch(`${API_BASE}/chat`, {
+  const response = await fetch(`/api/v1/chat`, {
     method: "POST",
     cache: "no-store",
     headers: {
@@ -65,110 +42,7 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [previousInteractionId, setPreviousInteractionId] = useState<string | null>(null);
-  const socketRef = useRef<WebSocket | null>(null);
-  const pendingOpenRef = useRef<Promise<WebSocket | null> | null>(null);
   const listEndRef = useRef<HTMLDivElement | null>(null);
-  const [wsUrl, setWsUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    setWsUrl(buildWsUrl());
-  }, []);
-
-  useEffect(() => {
-    if (!wsUrl) {
-      return;
-    }
-
-    const connect = () => {
-      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-        return Promise.resolve(socketRef.current);
-      }
-      if (pendingOpenRef.current) {
-        return pendingOpenRef.current;
-      }
-
-      pendingOpenRef.current = new Promise<WebSocket | null>((resolve) => {
-        let settled = false;
-        const finish = (socket: WebSocket | null) => {
-          if (settled) return;
-          settled = true;
-          pendingOpenRef.current = null;
-          resolve(socket);
-        };
-
-        const socket = new WebSocket(wsUrl);
-        socketRef.current = socket;
-
-        socket.onopen = () => {
-          finish(socket);
-        };
-
-        socket.onmessage = (event) => {
-          const payload = JSON.parse(event.data) as StreamEvent;
-
-          if (payload.type === "start") {
-            setMessages((current) => [...current, { role: "assistant", content: "", pending: true }]);
-            return;
-          }
-
-          if (payload.type === "delta") {
-            setMessages((current) => {
-              const next = [...current];
-              const last = next[next.length - 1];
-              if (!last || last.role !== "assistant") {
-                next.push({ role: "assistant", content: payload.text, pending: true });
-                return next;
-              }
-              last.content += payload.text;
-              return next;
-            });
-            return;
-          }
-
-          if (payload.type === "done") {
-            setMessages((current) => {
-              const next = [...current];
-              const last = next[next.length - 1];
-              if (last && last.role === "assistant") {
-                last.content = payload.answer;
-                last.pending = false;
-              }
-              return next;
-            });
-            setPreviousInteractionId(payload.interaction_id ?? null);
-            setIsSending(false);
-            return;
-          }
-
-          if (payload.type === "error") {
-            setIsSending(false);
-          }
-        };
-
-        socket.onerror = () => {
-          finish(null);
-        };
-
-        socket.onclose = () => {
-          if (!settled) {
-            finish(null);
-          } else {
-            pendingOpenRef.current = null;
-          }
-        };
-      });
-
-      return pendingOpenRef.current;
-    };
-
-    void connect();
-
-    return () => {
-      socketRef.current?.close();
-      socketRef.current = null;
-      pendingOpenRef.current = null;
-    };
-  }, [wsUrl]);
 
   useEffect(() => {
     listEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -191,12 +65,6 @@ export default function ChatPage() {
       previous_interaction_id: previousInteractionId,
       temperature: 0.2,
     };
-
-    const socket = socketRef.current;
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify(payload));
-      return;
-    }
 
     try {
       const data = await fetchChatResponse(payload);

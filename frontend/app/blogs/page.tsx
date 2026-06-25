@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import BlogList from "../../components/BlogList";
-import { getBlogs } from "../../lib/content";
 import { getLocalBlogPosts } from "./local-posts";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  const posts = await getBlogs().catch(() => getLocalBlogPosts());
-  const safePosts = posts.length ? posts : await getLocalBlogPosts();
-  return <BlogList posts={safePosts} />;
+  const posts = await getLocalBlogPosts();
+  return <BlogList posts={posts} />;
 }

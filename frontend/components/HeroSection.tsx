@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { proxiedImageUrl, type PersonProfile } from "../lib/content";
+import { type PersonProfile } from "../lib/content";
 
 interface HeroSectionProps {
   isVisible?: boolean;
@@ -10,7 +10,7 @@ interface HeroSectionProps {
   heroImageUrl?: string;
 }
 
-const FALLBACK_HERO_IMAGE_URL = "https://res.cloudinary.com/dryti9lfu/image/upload/f_auto,q_auto/side_pose_u7pf08";
+const FALLBACK_HERO_IMAGE_URL = "/my_pictures/side_pose.jpg";
 
 function ProfileWindow({ isVisible, heroImageUrl }: { isVisible: boolean; heroImageUrl?: string }) {
   return (
@@ -28,30 +28,14 @@ function ProfileWindow({ isVisible, heroImageUrl }: { isVisible: boolean; heroIm
         </div>
 
         <div className="relative aspect-[4/5] bg-black/20">
-          {(() => {
-            const imageUrl = heroImageUrl?.trim() || FALLBACK_HERO_IMAGE_URL;
-            const src = proxiedImageUrl(imageUrl);
-
-            if (!src) {
-              return (
-                <div className="flex h-full items-center justify-center bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800 text-sm text-white/60">
-                  Add a hero image URL in backend/.env
-                </div>
-              );
-            }
-
-            return (
-              <Image
-                src={src}
-                alt="Abdullah Khan side profile"
-                fill
-                priority
-                unoptimized
-                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 420px, 470px"
-                style={{ objectFit: "cover", objectPosition: "center 15%" }}
-              />
-            );
-          })()}
+          <Image
+            src={heroImageUrl?.trim() || FALLBACK_HERO_IMAGE_URL}
+            alt="Abdullah Khan side profile"
+            fill
+            priority
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 420px, 470px"
+            style={{ objectFit: "cover", objectPosition: "center 15%" }}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/5 to-transparent" />
         </div>
       </div>
@@ -117,3 +101,4 @@ export default function HeroSection({ isVisible = false, profile, heroImageUrl }
     </div>
   );
 }
+

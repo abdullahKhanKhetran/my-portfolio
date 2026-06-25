@@ -99,7 +99,7 @@ export default function ProjectDetail({ project }: { project: PortfolioProject }
                       fill
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       unoptimized
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-contain p-6 group-hover:scale-105 transition-transform duration-700"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-950 text-white">
@@ -188,3 +188,4 @@ export default function ProjectDetail({ project }: { project: PortfolioProject }
     </div>
   );
 }
+
