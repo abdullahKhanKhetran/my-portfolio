@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:3000"]
 
     database_url: str | None = None
+    direct_url: str | None = None
     supabase_db_url: str | None = None
     supabase_db_host: str | None = None
     supabase_db_port: int = 5432
@@ -108,6 +109,9 @@ class Settings(BaseSettings):
         if self.database_url:
             return self._sanitize_database_url(self.database_url)
 
+        if self.direct_url:
+            return self._sanitize_database_url(self.direct_url)
+
         if self.supabase_db_url:
             return self._sanitize_database_url(self.supabase_db_url)
 
@@ -124,8 +128,9 @@ class Settings(BaseSettings):
             )
 
         if self.environment.lower() == "production":
-            tmp_sqlite_path = Path("/tmp/portfolio.db").resolve().as_posix()
-            return f"sqlite:///{tmp_sqlite_path}"
+            raise RuntimeError(
+                "Production database settings are missing. Set DATABASE_URL or SUPABASE_DB_URL on the backend deployment."
+            )
 
         sqlite_path = (Path(__file__).resolve().parents[2] / "portfolio.db").resolve().as_posix()
         return f"sqlite:///{sqlite_path}"
@@ -134,5 +139,3 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-
-

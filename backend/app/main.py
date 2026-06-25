@@ -44,7 +44,9 @@ app.include_router(admin_router, prefix=settings.api_v1_prefix)
 
 @app.on_event("startup")
 def startup() -> None:
-    # Vercel serverless functions are ephemeral, so we skip local bootstrap work there.
+    # Vercel serverless functions should stay stateless. Schema creation and
+    # seeding belong to local/dev workflows or explicit migration jobs, not
+    # every cold start in production.
     if settings.vercel or settings.environment.lower() == "production":
         return
 
