@@ -170,7 +170,35 @@ export const LOCAL_SKILLS: PortfolioSkill[] = [
   { id: 14, category: "DevOps", name: "AWS", proficiency: 80, sort_order: 14 },
 ];
 
-export const LOCAL_TESTIMONIALS: PortfolioTestimonial[] = [];
+export const LOCAL_TESTIMONIALS: PortfolioTestimonial[] = [
+  {
+    id: 1,
+    author_name: "Ayesha Rahman",
+    author_role: "Product Manager",
+    company: "Student Platform",
+    quote: "Abdullah has a strong instinct for shipping practical systems. He turns vague ideas into clean, working products and keeps the architecture easy to maintain.",
+    avatar_url: null,
+    sort_order: 1,
+  },
+  {
+    id: 2,
+    author_name: "Hamza Ali",
+    author_role: "Flutter Developer",
+    company: "Mobile Team",
+    quote: "Working with Abdullah on the Flutter app side was smooth. He pays attention to data flow, state management, and the little details that make an app feel polished.",
+    avatar_url: null,
+    sort_order: 2,
+  },
+  {
+    id: 3,
+    author_name: "Sara Khan",
+    author_role: "Founder",
+    company: "AI Product",
+    quote: "What stands out about Abdullah is that he thinks beyond the UI. He builds for scale, adds sensible backend structure, and always keeps the end user in mind.",
+    avatar_url: null,
+    sort_order: 3,
+  },
+];
 
 export function parsePersonProfile(person: string): PersonProfile {
   const grab = (label: string) => {
@@ -237,3 +265,5 @@ export async function getTestimonials() {
 export async function getProfileBundle() {
   return LOCAL_PROFILE_BUNDLE;
 }
+
+

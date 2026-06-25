@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
   const mouseX = useRef(0);
   const mouseY = useRef(0);
   const cursorX = useRef(0);
@@ -32,9 +32,9 @@ export default function CustomCursor() {
         cursorRef.current.style.left = cursorX.current + "px";
         cursorRef.current.style.top = cursorY.current + "px";
       }
-      if (dotRef.current) {
-        dotRef.current.style.left = mouseX.current + "px";
-        dotRef.current.style.top = mouseY.current + "px";
+      if (badgeRef.current) {
+        badgeRef.current.style.left = mouseX.current + "px";
+        badgeRef.current.style.top = mouseY.current + "px";
       }
 
       rafId = requestAnimationFrame(animate);
@@ -55,12 +55,15 @@ export default function CustomCursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed w-12 h-12 border-2 border-white rounded-full pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+        className="fixed w-14 h-14 border-2 border-white rounded-full pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
       />
       <div
-        ref={dotRef}
-        className="fixed w-3 h-3 bg-white rounded-full pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
-      />
+        ref={badgeRef}
+        className="fixed pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 mix-blend-difference font-mono text-[13px] font-bold tracking-[0.18em] text-white"
+      >
+        &lt;/&gt;
+      </div>
     </>
   );
 }
+
