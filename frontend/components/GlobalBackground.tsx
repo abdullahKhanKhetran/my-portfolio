@@ -1,5 +1,7 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
+import { FEATURE_FLAGS } from "../lib/featureFlags";
 
 interface SectionColor {
   id: string;
@@ -60,11 +62,11 @@ const CHARS = "01{}=>;#/<>[]()abcdefABCDEF".split("");
 export default function GlobalBackground() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [bgColor, setBgColor] = useState(DARK_SECTION_COLORS[0].color);
+  const [matrixEnabled, setMatrixEnabled] = useState<boolean>(FEATURE_FLAGS.matrixRain);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
   const themeRef = useRef<"dark" | "light">("dark");
 
-  // Track theme from <html class="dark"> + ThemeToggle's custom event
   useEffect(() => {
     const current = document.documentElement.classList.contains("dark") ? "dark" : "light";
     setTheme(current);
@@ -79,6 +81,36 @@ export default function GlobalBackground() {
   }, []);
 
   useEffect(() => {
+    const syncMatrix = () => {
+      try {
+        const stored = localStorage.getItem("matrixRain");
+        if (stored === null) {
+          setMatrixEnabled(FEATURE_FLAGS.matrixRain);
+          return;
+        }
+        setMatrixEnabled(stored === "true");
+      } catch {
+        setMatrixEnabled(FEATURE_FLAGS.matrixRain);
+      }
+    };
+
+    syncMatrix();
+    const onMatrix = () => syncMatrix();
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "matrixRain") {
+        syncMatrix();
+      }
+    };
+
+    window.addEventListener("matrixchange", onMatrix);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("matrixchange", onMatrix);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, []);
+
+  useEffect(() => {
     const SECTION_COLORS = theme === "dark" ? DARK_SECTION_COLORS : LIGHT_SECTION_COLORS;
 
     function onScroll() {
@@ -90,7 +122,6 @@ export default function GlobalBackground() {
       }).filter((s): s is { id: string; top: number; height: number } => s !== null);
 
       if (sections.length === 0) {
-        // No homepage sections (e.g. /blogs, /projects) — use the base color
         setBgColor(SECTION_COLORS[0].color);
         return;
       }
@@ -149,7 +180,6 @@ export default function GlobalBackground() {
       columns = Array(Math.floor(canvas.width / charSize)).fill(0);
     }
 
-    // ~24fps is plenty for the rain and keeps main-thread cost low
     const FRAME_INTERVAL = 41;
     let lastFrame = 0;
 
@@ -159,8 +189,6 @@ export default function GlobalBackground() {
       if (timestamp - lastFrame < FRAME_INTERVAL) return;
       lastFrame = timestamp;
 
-      // Trail fade matches the theme; the rain stays matrix-green in both,
-      // but light mode needs a much darker shade to read against a light bg
       ctx.fillStyle =
         themeRef.current === "dark" ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.06)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -187,8 +215,6 @@ export default function GlobalBackground() {
       init();
     }
 
-    // Reset accumulated trails when the theme flips so the old fade
-    // color doesn't linger as a veil over the new background
     const onThemeChange = () => ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     init();
@@ -205,7 +231,6 @@ export default function GlobalBackground() {
 
   return (
     <div aria-hidden style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}>
-      {/* Base color lerping between sections */}
       <div
         style={{
           position: "absolute",
@@ -216,22 +241,17 @@ export default function GlobalBackground() {
         }}
       />
 
-      {/* Matrix rain canvas */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          opacity: "var(--matrix-opacity, 0.09)" as React.CSSProperties["opacity"],
+          opacity: matrixEnabled ? (("var(--matrix-opacity, 0.09)" as React.CSSProperties["opacity"])) : 0,
           zIndex: 1,
         }}
       >
-        <canvas
-          ref={canvasRef}
-          style={{ display: "block", width: "100%", height: "100%" }}
-        />
+        <canvas ref={canvasRef} style={{ display: "block", width: "100%", height: "100%" }} />
       </div>
 
-      {/* Subtle noise texture */}
       <div
         style={{
           position: "absolute",
@@ -244,3 +264,5 @@ export default function GlobalBackground() {
     </div>
   );
 }
+
+

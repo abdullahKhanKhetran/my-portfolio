@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
+import { FEATURE_FLAGS } from "../lib/featureFlags";
 
 interface NavItem {
   label: string;
@@ -81,7 +82,8 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-const HASH_ITEMS = NAV_ITEMS.filter((item) => item.href.startsWith("#"));
+const VISIBLE_NAV_ITEMS = NAV_ITEMS.filter((item) => item.href !== "/chat" || FEATURE_FLAGS.chat);
+const HASH_ITEMS = VISIBLE_NAV_ITEMS.filter((item) => item.href.startsWith("#"));
 
 const SHAPE_VARIANTS = [
   "rounded-tl-[999px] rounded-tr-[14px] rounded-br-[999px] rounded-bl-[14px]",
@@ -174,11 +176,7 @@ export default function Navbar() {
 
     if (item.href.startsWith("/")) {
       return (
-        <Link
-          href={item.href}
-          prefetch
-          className={className}
-        >
+        <Link href={item.href} prefetch className={className}>
           <span className="flex items-center justify-center">{item.icon}</span>
           <span className={labelClass}>{item.label}</span>
         </Link>
@@ -186,11 +184,7 @@ export default function Navbar() {
     }
 
     return (
-      <button
-        className={className}
-        onClick={() => handleClick(item.href)}
-        aria-label={item.label}
-      >
+      <button className={className} onClick={() => handleClick(item.href)} aria-label={item.label}>
         <span className="flex items-center justify-center">{item.icon}</span>
         <span className={labelClass}>{item.label}</span>
       </button>
@@ -202,12 +196,7 @@ export default function Navbar() {
 
     if (item.href.startsWith("/")) {
       return (
-        <Link
-          href={item.href}
-          prefetch
-          onClick={() => setIsMobileMenuOpen(false)}
-          className={className}
-        >
+        <Link href={item.href} prefetch onClick={() => setIsMobileMenuOpen(false)} className={className}>
           {item.label}
         </Link>
       );
@@ -228,25 +217,22 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Desktop navigation */}
       <nav className="pointer-events-none fixed left-1/2 top-4 z-50 hidden -translate-x-1/2 md:block">
         <div className="pointer-events-auto">
           <ul className="flex items-center gap-4 lg:gap-5">
-            {NAV_ITEMS.map((item, index) => (
+            {VISIBLE_NAV_ITEMS.map((item, index) => (
               <li key={item.href}>{renderDesktopItem(item, index)}</li>
             ))}
           </ul>
         </div>
       </nav>
 
-      {/* Desktop theme toggle */}
       <div className="pointer-events-none fixed right-6 top-4 z-50 hidden md:block">
         <div className="pointer-events-auto">
           <ThemeToggle />
         </div>
       </div>
 
-      {/* Floating mobile controls */}
       <nav className="pointer-events-none fixed right-4 top-4 z-50 flex flex-col items-end gap-3 md:right-6 md:top-6 md:hidden">
         <div className="pointer-events-auto">
           <ThemeToggle />
@@ -275,7 +261,7 @@ export default function Navbar() {
             }`}
           >
             <ul className="flex flex-col gap-2">
-              {NAV_ITEMS.map((item, index) => (
+              {VISIBLE_NAV_ITEMS.map((item, index) => (
                 <li key={item.href}>{renderMobileItem(item, index)}</li>
               ))}
             </ul>
@@ -285,5 +271,3 @@ export default function Navbar() {
     </>
   );
 }
-
-
