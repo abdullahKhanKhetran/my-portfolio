@@ -9,16 +9,28 @@ const SCRAMBLE_CHARS = "01{}=>;#/<>[]()abcdefABCDEF";
 const DURATION = 1600;
 const EXIT_PAUSE = 300;
 
+// Deterministic stand-in for Math.random(): the loader is server-rendered, so a
+// truly random glyph would differ between the SSR markup and hydration.
+function scrambleGlyph(index: number, frame: number) {
+  const noise = Math.sin(index * 31.7 + frame * 12.9) * 10000;
+  return SCRAMBLE_CHARS[Math.floor((noise - Math.floor(noise)) * SCRAMBLE_CHARS.length)];
+}
+
 export default function LoadingScreen() {
-  const [visible, setVisible] = useState(false);
+  // Default to visible so the very first paint (SSR + hydration) is the
+  // loader, not the page underneath — avoids a flash of home page content
+  // before the loading screen appears.
+  const [visible, setVisible] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [frame, setFrame] = useState(0);
 
   // Show only once per session
   useEffect(() => {
-    if (!sessionStorage.getItem("booted")) {
-      sessionStorage.setItem("booted", "1");
-      setVisible(true);
+    if (sessionStorage.getItem("booted")) {
+      setVisible(false);
+      return;
     }
+    sessionStorage.setItem("booted", "1");
   }, []);
 
   // Progress driver: eased 0 → 100, then fade out
@@ -32,6 +44,7 @@ export default function LoadingScreen() {
       const t = Math.min(1, (now - start) / DURATION);
       const eased = 1 - Math.pow(1 - t, 3);
       setProgress(Math.round(eased * 100));
+      setFrame((f) => f + 1);
       if (t < 1) {
         raf = requestAnimationFrame(tick);
       } else {
@@ -55,6 +68,7 @@ export default function LoadingScreen() {
       {visible && (
         <motion.div
           key="loader"
+          id="app-loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -99,9 +113,7 @@ export default function LoadingScreen() {
                         }
                   }
                 >
-                  {isResolved
-                    ? char
-                    : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]}
+                  {isResolved ? char : scrambleGlyph(i, frame)}
                 </span>
               );
             })}

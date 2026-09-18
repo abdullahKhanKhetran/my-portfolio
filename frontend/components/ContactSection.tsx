@@ -55,11 +55,11 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-2xl"
         >
-          <p className="mb-4 font-mono text-xs uppercase tracking-[0.35em] text-zinc-500 dark:text-zinc-400">
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.35em] text-zinc-500">
             Contact
           </p>
 
-          <h2 className="text-4xl font-bold leading-tight text-zinc-900 dark:text-white sm:text-5xl md:text-6xl" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", letterSpacing: "-0.03em" }}>
+          <h2 className="text-4xl font-bold leading-tight text-zinc-900 sm:text-5xl md:text-6xl" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", letterSpacing: "-0.03em" }}>
             Let&apos;s Build
             <br />
             <span style={{ background: "linear-gradient(135deg, #8b5cf6, #06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
@@ -67,7 +67,7 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
             </span>
           </h2>
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontWeight: 300 }}>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)", fontWeight: 300 }}>
             Got a project in mind? Let&apos;s connect and turn your idea into reality. I&apos;m always open to interesting work and collaborations.
           </p>
 
@@ -106,11 +106,11 @@ export default function ContactSection({ isVisible = false }: { isVisible?: bool
             ))}
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3 text-sm text-zinc-600 dark:text-zinc-400">
-            <span className="rounded-full border border-zinc-900/10 bg-zinc-900/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
+          <div className="mt-8 flex flex-wrap gap-3 text-sm text-zinc-600">
+            <span className="rounded-full border border-zinc-900/10 bg-zinc-900/5 px-3 py-2">
               📍 Islamabad, Pakistan
             </span>
-            <span className="rounded-full border border-zinc-900/10 bg-zinc-900/5 px-3 py-2 dark:border-white/10 dark:bg-white/5">
+            <span className="rounded-full border border-zinc-900/10 bg-zinc-900/5 px-3 py-2">
               ✉️ abdullahkhitran2005@gmail.com
             </span>
           </div>

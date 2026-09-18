@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 :root {
   color-scheme: light;
   --background: #f5f5f1;
@@ -25,29 +23,15 @@
   --btn-primary-fg: #ffffff;
 }
 
-.dark {
-  color-scheme: dark;
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --matrix-opacity: 0.25;
-  --card-bg: rgba(255, 255, 255, 0.04);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --card-border-strong: rgba(255, 255, 255, 0.12);
-  --text-strong: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.85);
-  --text-body: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.45);
-  --text-faint: rgba(255, 255, 255, 0.3);
-  --divider: rgba(255, 255, 255, 0.08);
-  --dot: rgba(255, 255, 255, 0.2);
-  --grid-line: rgba(255, 255, 255, 0.15);
-  --accent-emerald: #34d399;
-  --btn-primary-bg: #ffffff;
-  --btn-primary-fg: #000000;
-}
-
 html {
   scroll-behavior: smooth;
+}
+
+/* The loader is server-rendered so it owns the first paint. On a repeat load in
+   the same tab it has already played, so hide it before paint rather than
+   waiting for hydration to unmount it. */
+.booted #app-loader {
+  visibility: hidden;
 }
 
 html,
@@ -179,8 +163,6 @@ button:disabled {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.35); }
-.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
-.dark ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {

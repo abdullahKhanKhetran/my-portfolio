@@ -193,22 +193,22 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
       >
         <div className="flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto mb-12 gap-4">
           <div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)" }}>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zinc-900" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)" }}>
               Featured Projects
             </h2>
             <p className="text-zinc-500 text-sm mt-1 tracking-widest uppercase">Local project data from the repo</p>
           </div>
 
-          <div className="flex items-center gap-1 p-1 rounded-xl border border-zinc-900/10 bg-zinc-900/5 dark:border-white/10 dark:bg-white/5">
+          <div className="flex items-center gap-1 p-1 rounded-xl border border-zinc-900/10 bg-zinc-900/5">
             <button
               onClick={() => { playClick(); setView("carousel"); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${view === "carousel" ? "bg-zinc-900 text-white dark:bg-white dark:text-black" : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${view === "carousel" ? "bg-zinc-900 text-white" : "text-zinc-500 hover:text-zinc-900"}`}
             >
               Tiles
             </button>
             <button
               onClick={() => { playClick(); setView("grid"); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${view === "grid" ? "bg-zinc-900 text-white dark:bg-white dark:text-black" : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${view === "grid" ? "bg-zinc-900 text-white" : "text-zinc-500 hover:text-zinc-900"}`}
             >
               Grid
             </button>
@@ -246,7 +246,7 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
             <div className="flex items-center justify-center gap-6 mt-8">
               <button
                 onClick={prev}
-                className="w-10 h-10 rounded-full border border-zinc-900/20 text-zinc-900/50 hover:text-zinc-900 hover:border-zinc-900/50 dark:border-white/15 dark:text-white/60 dark:hover:text-white dark:hover:border-white/40 flex items-center justify-center transition-all duration-200 hover:scale-110"
+                className="w-10 h-10 rounded-full border border-zinc-900/20 text-zinc-900/50 hover:text-zinc-900 hover:border-zinc-900/50 flex items-center justify-center transition-all duration-200 hover:scale-110"
               >
                 ←
               </button>
@@ -269,7 +269,7 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
               </div>
               <button
                 onClick={next}
-                className="w-10 h-10 rounded-full border border-zinc-900/20 text-zinc-900/50 hover:text-zinc-900 hover:border-zinc-900/50 dark:border-white/15 dark:text-white/60 dark:hover:text-white dark:hover:border-white/40 flex items-center justify-center transition-all duration-200 hover:scale-110"
+                className="w-10 h-10 rounded-full border border-zinc-900/20 text-zinc-900/50 hover:text-zinc-900 hover:border-zinc-900/50 flex items-center justify-center transition-all duration-200 hover:scale-110"
               >
                 →
               </button>
@@ -315,7 +315,7 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
                   />
 
                   <div className="relative z-10 w-full flex flex-col gap-3">
-                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-zinc-900/10 dark:bg-white/10 relative flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-zinc-900/10 relative flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                       {project.cover_image_url ? (
                         <Image
                           src={proxiedImageUrl(project.cover_image_url) ?? ""}
@@ -326,7 +326,7 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
                           style={{ objectFit: "contain", padding: 10 }}
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center font-bold text-lg text-zinc-900 dark:text-white">
+                        <div className="flex h-full w-full items-center justify-center font-bold text-lg text-zinc-900">
                           {project.title.slice(0, 1)}
                         </div>
                       )}
@@ -336,10 +336,10 @@ export default function PortfolioSection({ projects, isVisible = false }: { proj
                       <p style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.1em", color: PROJECT_GLOWS[index % PROJECT_GLOWS.length], textTransform: "uppercase", marginBottom: 4 }}>
                         {new Date(project.created_at).getFullYear()}
                       </p>
-                      <h3 className="text-xl font-bold text-zinc-900 dark:text-white">{project.title}</h3>
+                      <h3 className="text-xl font-bold text-zinc-900">{project.title}</h3>
                     </div>
 
-                    <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-3">{project.summary}</p>
+                    <p className="text-zinc-600 text-sm leading-relaxed line-clamp-3">{project.summary}</p>
 
                     <div className="flex flex-wrap gap-2">
                       {project.stack.slice(0, 3).map((tech) => (

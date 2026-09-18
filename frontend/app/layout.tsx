@@ -27,7 +27,7 @@ export default function RootLayout({
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(localStorage.getItem("theme")!=="light")document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})()`,
+            __html: `(function(){try{if(sessionStorage.getItem("booted"))document.documentElement.classList.add("booted")}catch(e){}})()`,
           }}
         />
       </head>

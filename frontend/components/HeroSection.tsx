@@ -46,10 +46,10 @@ function ProfileWindow({ isVisible, heroImageUrl }: { isVisible: boolean; heroIm
 function HeroButtons() {
   return (
     <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-      <a href="#portfolio" className="rounded-lg bg-zinc-900 px-6 py-3 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-200 sm:px-8 sm:text-base">
+      <a href="#portfolio" className="rounded-lg bg-zinc-900 px-6 py-3 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-zinc-700 sm:px-8 sm:text-base">
         See My Work
       </a>
-      <a href="#contact" className="rounded-lg border border-zinc-900/30 px-6 py-3 text-center text-sm font-semibold text-zinc-900 transition-all duration-300 hover:bg-zinc-900/5 dark:border-white/30 dark:text-white dark:hover:bg-white/10 sm:px-8 sm:text-base">
+      <a href="#contact" className="rounded-lg border border-zinc-900/30 px-6 py-3 text-center text-sm font-semibold text-zinc-900 transition-all duration-300 hover:bg-zinc-900/5 sm:px-8 sm:text-base">
         Get In Touch
       </a>
     </div>
@@ -63,16 +63,16 @@ function HeroIntro({ profile, className = "" }: { profile?: PersonProfile; class
 
   return (
     <div className={className}>
-      <p className="mb-3 font-mono text-xs font-medium uppercase tracking-widest text-green-600 dark:text-green-400 sm:text-sm">
+      <p className="mb-3 font-mono text-xs font-medium uppercase tracking-widest text-green-600 sm:text-sm">
         &gt; Hello, world!
       </p>
-      <h1 className="mb-3 text-3xl font-bold leading-tight text-zinc-900 dark:text-white sm:text-4xl md:mb-4 md:text-5xl lg:text-7xl">
+      <h1 className="mb-3 text-3xl font-bold leading-tight text-zinc-900 sm:text-4xl md:mb-4 md:text-5xl lg:text-7xl">
         I&apos;m {name.split(" ")[0]}
       </h1>
-      <h3 className="mb-4 text-lg font-semibold text-zinc-700 dark:text-zinc-300 sm:text-xl md:mb-6 md:text-2xl">
+      <h3 className="mb-4 text-lg font-semibold text-zinc-700 sm:text-xl md:mb-6 md:text-2xl">
         {role}
       </h3>
-      <p className="mb-6 max-w-lg text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-base md:mb-8">
+      <p className="mb-6 max-w-lg text-sm leading-relaxed text-zinc-600 sm:text-base md:mb-8">
         {about}
       </p>
     </div>

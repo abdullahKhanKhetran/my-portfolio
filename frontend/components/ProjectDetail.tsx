@@ -30,11 +30,11 @@ export default function ProjectDetail({ project }: { project: PortfolioProject }
   const year = new Date(project.created_at).getFullYear();
 
   return (
-    <div className="min-h-screen text-zinc-900 dark:text-white overflow-x-hidden">
+    <div className="min-h-screen text-zinc-900 overflow-x-hidden">
       {particles.map((p, i) => (
         <div
           key={i}
-          className="absolute w-1 h-1 bg-zinc-900/10 dark:bg-white/10 rounded-full animate-float pointer-events-none"
+          className="absolute w-1 h-1 bg-zinc-900/10 rounded-full animate-float pointer-events-none"
           style={{
             left: p.left,
             top: p.top,
@@ -44,11 +44,11 @@ export default function ProjectDetail({ project }: { project: PortfolioProject }
         />
       ))}
 
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-900/5 dark:border-white/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-zinc-900/5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link
             href="/#portfolio"
-            className="flex items-center gap-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors group"
+            className="flex items-center gap-2 text-zinc-500 hover:text-zinc-900 transition-colors group"
           >
             <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -68,21 +68,21 @@ export default function ProjectDetail({ project }: { project: PortfolioProject }
           >
             <div className="grid lg:grid-cols-2 gap-6 md:gap-12 lg:gap-20 items-center mb-20">
               <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/5 border-zinc-900/10 dark:bg-white/5 border dark:border-white/10 text-sm text-zinc-600 dark:text-zinc-400 mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/5 border-zinc-900/10 border text-sm text-zinc-600 mb-6">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   <span>{project.role}</span>
                 </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                  <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                     {project.title}
                   </span>
                 </h1>
-                <p className="text-lg sm:text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed mb-8">
+                <p className="text-lg sm:text-xl text-zinc-700 leading-relaxed mb-8">
                   {project.summary}
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {project.stack.map((tech) => (
-                    <span key={tech} className="px-4 py-2 rounded-xl bg-zinc-900/5 border-zinc-900/10 text-zinc-700 hover:bg-zinc-900/10 hover:border-zinc-900/20 dark:bg-white/5 border dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:border-white/20 text-sm transition-all duration-300 hover:scale-105">
+                    <span key={tech} className="px-4 py-2 rounded-xl bg-zinc-900/5 border-zinc-900/10 text-zinc-700 hover:bg-zinc-900/10 hover:border-zinc-900/20 border text-sm transition-all duration-300 hover:scale-105">
                       {tech}
                     </span>
                   ))}
@@ -119,20 +119,20 @@ export default function ProjectDetail({ project }: { project: PortfolioProject }
             className="mb-20"
           >
             <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
-              <span className="bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
                 Quick Links
               </span>
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/5 dark:bg-white/5 dark:border-white/5">
+              <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/5">
                 <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">Featured</p>
                 <h3 className="mt-2 text-lg font-semibold">{project.featured ? "Yes" : "No"}</h3>
               </div>
-              <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/5 dark:bg-white/5 dark:border-white/5">
+              <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/5">
                 <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">Sort Order</p>
                 <h3 className="mt-2 text-lg font-semibold">{project.sort_order}</h3>
               </div>
-              <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/5 dark:bg-white/5 dark:border-white/5">
+              <div className="p-6 rounded-2xl bg-zinc-900/5 border border-zinc-900/5">
                 <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">Slug</p>
                 <h3 className="mt-2 text-lg font-semibold">{project.slug}</h3>
               </div>
@@ -164,14 +164,14 @@ export default function ProjectDetail({ project }: { project: PortfolioProject }
                   href={project.repo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-8 py-4 rounded-full border-2 border-zinc-900/20 text-zinc-900 hover:bg-zinc-900/5 dark:border-white/20 dark:text-white dark:hover:bg-white/10 font-semibold transition-all duration-300 hover:scale-105"
+                  className="px-8 py-4 rounded-full border-2 border-zinc-900/20 text-zinc-900 hover:bg-zinc-900/5 font-semibold transition-all duration-300 hover:scale-105"
                 >
                   View Repository
                 </a>
               ) : null}
               <Link
                 href="/#contact"
-                className="px-8 py-4 rounded-full border-2 border-zinc-900/20 text-zinc-900 hover:bg-zinc-900/5 dark:border-white/20 dark:text-white dark:hover:bg-white/10 font-semibold transition-all duration-300 hover:scale-105"
+                className="px-8 py-4 rounded-full border-2 border-zinc-900/20 text-zinc-900 hover:bg-zinc-900/5 font-semibold transition-all duration-300 hover:scale-105"
               >
                 Get In Touch
               </Link>
@@ -180,7 +180,7 @@ export default function ProjectDetail({ project }: { project: PortfolioProject }
         </div>
       </main>
 
-      <footer className="relative z-10 border-t border-zinc-900/10 dark:border-white/5 py-8 px-4">
+      <footer className="relative z-10 border-t border-zinc-900/10 py-8 px-4">
         <div className="max-w-7xl mx-auto text-center text-zinc-500">
           <p>© {year} Abdullah Khan. All rights reserved.</p>
         </div>

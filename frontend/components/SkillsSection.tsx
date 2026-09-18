@@ -17,6 +17,7 @@ const DOMAIN_META: Record<string, Omit<Domain, "skills">> = {
   mobile: { title: "Mobile", icon: "📱", glow: "#10b981", description: "Cross-platform native apps" },
   ai: { title: "AI", icon: "🤖", glow: "#f59e0b", description: "Intelligent systems & automation" },
   devops: { title: "DevOps", icon: "☁️", glow: "#ef4444", description: "Deployment and infrastructure" },
+  database: { title: "Database", icon: "🗄️", glow: "#3b82f6", description: "Data storage & management" },
   default: { title: "Skills", icon: "✨", glow: "#64748b", description: "Capabilities and tools" },
 };
 
@@ -61,7 +62,7 @@ export default function SkillsSection({ skills, isVisible = false }: { skills: P
         animate={isVisible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 60, scale: 0.95 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-zinc-900 dark:text-white" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)" }}>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-zinc-900" style={{ fontFamily: "var(--font-space-grotesk, sans-serif)" }}>
           Skills & Expertise
         </h2>
         <p className="text-center text-zinc-500 mb-16 text-sm tracking-widest uppercase">

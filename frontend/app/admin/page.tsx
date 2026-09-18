@@ -65,6 +65,7 @@ export default function AdminPage() {
               <li><span className="font-semibold">Hero / profile:</span> `frontend/lib/content.ts`</li>
               <li><span className="font-semibold">Hero image:</span> `frontend/public/my_pictures/side_pose.jpg`</li>
               <li><span className="font-semibold">Projects / skills:</span> `frontend/lib/content.ts`</li>
+              <li><span className="font-semibold">Resume:</span> replace `frontend/public/docs/Abdullah_Khan_Resume.pdf` (same filename)</li>
               <li><span className="font-semibold">Blogs:</span> `frontend/app/blogs/local-posts.ts` and `frontend/public/blogs/`</li>
               <li><span className="font-semibold">Chat knowledge:</span> `backend/knowledge/`</li>
             </ul>
@@ -76,7 +77,7 @@ export default function AdminPage() {
             <p className="text-xs uppercase tracking-[0.35em] text-[var(--text-muted)]">Projects</p>
             <div className="mt-4 space-y-4">
               {LOCAL_PROJECTS.map((project) => (
-                <article key={project.slug} className="rounded-2xl border border-[var(--card-border)] bg-white/60 p-4 dark:bg-black/20">
+                <article key={project.slug} className="rounded-2xl border border-[var(--card-border)] bg-white/60 p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="text-lg font-semibold">{project.title}</h3>
@@ -102,7 +103,7 @@ export default function AdminPage() {
               <p className="text-xs uppercase tracking-[0.35em] text-[var(--text-muted)]">Skills</p>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 {Object.entries(groupedSkills).map(([category, items]) => (
-                  <div key={category} className="rounded-2xl border border-[var(--card-border)] bg-white/60 p-4 dark:bg-black/20">
+                  <div key={category} className="rounded-2xl border border-[var(--card-border)] bg-white/60 p-4">
                     <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-[var(--text-muted)]">{category}</h3>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {items.map((skill) => (
@@ -118,7 +119,7 @@ export default function AdminPage() {
 
             <div className="rounded-[2rem] border border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-lg backdrop-blur-xl">
               <p className="text-xs uppercase tracking-[0.35em] text-[var(--text-muted)]">Testimonials</p>
-              <div className="mt-4 rounded-2xl border border-dashed border-[var(--card-border)] bg-white/50 p-6 text-sm text-[var(--text-muted)] dark:bg-black/20">
+              <div className="mt-4 rounded-2xl border border-dashed border-[var(--card-border)] bg-white/50 p-6 text-sm text-[var(--text-muted)]">
                 No testimonial records are stored locally yet. Add them in `frontend/lib/content.ts` if you want the public site to show them.
               </div>
             </div>

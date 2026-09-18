@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import ThemeToggle from "./ThemeToggle";
 import { FEATURE_FLAGS } from "../lib/featureFlags";
 
 interface NavItem {
@@ -42,22 +41,22 @@ const NAV_ITEMS: NavItem[] = [
     ),
   },
   {
-    label: "Testimonials",
-    href: "#testimonials",
-    icon: (
-      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h6M7 16h10" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H9l-4 3v-3H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
-      </svg>
-    ),
-  },
-  {
     label: "Contact",
     href: "#contact",
     icon: (
       <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16v12H4z" />
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7l8 6 8-6" />
+      </svg>
+    ),
+  },
+  {
+    label: "Resume",
+    href: "/resume",
+    icon: (
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h6M7 16h4" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 3h9l5 5v13a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1z" />
       </svg>
     ),
   },
@@ -156,13 +155,13 @@ export default function Navbar() {
     const activeClass =
       currentActive === item.href
         ? isContactActive && item.href === "#contact"
-          ? "bg-zinc-900 text-white dark:bg-white dark:text-black shadow-sm"
+          ? "bg-zinc-900 text-white shadow-sm"
           : mobile
-            ? "bg-zinc-900/10 text-zinc-900 dark:bg-white/10 dark:text-white"
-            : "bg-black/10 dark:bg-white/10 text-black dark:text-white shadow-sm"
+            ? "bg-zinc-900/10 text-zinc-900"
+            : "bg-black/10 text-black shadow-sm"
         : mobile
-          ? "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-          : "bg-transparent text-zinc-500 dark:text-zinc-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white";
+          ? "text-zinc-500 hover:text-zinc-900"
+          : "bg-transparent text-zinc-500 hover:bg-black/5 hover:text-black";
     return `${base} ${activeClass}`;
   };
 
@@ -227,20 +226,10 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <div className="pointer-events-none fixed right-6 top-4 z-50 hidden md:block">
-        <div className="pointer-events-auto">
-          <ThemeToggle />
-        </div>
-      </div>
-
       <nav className="pointer-events-none fixed right-4 top-4 z-50 flex flex-col items-end gap-3 md:right-6 md:top-6 md:hidden">
-        <div className="pointer-events-auto">
-          <ThemeToggle />
-        </div>
-
         <div className="pointer-events-auto relative">
           <button
-            className="flex h-12 w-12 items-center justify-center rounded-tl-[14px] rounded-tr-[999px] rounded-br-[14px] rounded-bl-[999px] bg-white/75 text-zinc-900 shadow-xl shadow-black/10 backdrop-blur-md transition-transform duration-200 hover:scale-105 dark:bg-black/45 dark:text-white"
+            className="flex h-12 w-12 items-center justify-center rounded-tl-[14px] rounded-tr-[999px] rounded-br-[14px] rounded-bl-[999px] bg-white/75 text-zinc-900 shadow-xl shadow-black/10 backdrop-blur-md transition-transform duration-200 hover:scale-105"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -254,7 +243,7 @@ export default function Navbar() {
           </button>
 
           <div
-            className={`absolute right-0 top-full mt-3 w-[min(88vw,18rem)] rounded-3xl border border-black/5 bg-white/95 p-3 shadow-2xl shadow-black/15 backdrop-blur-xl transition-all duration-300 dark:border-white/10 dark:bg-black/90 ${
+            className={`absolute right-0 top-full mt-3 w-[min(88vw,18rem)] rounded-3xl border border-black/5 bg-white/95 p-3 shadow-2xl shadow-black/15 backdrop-blur-xl transition-all duration-300 ${
               isMobileMenuOpen
                 ? "visible opacity-100 translate-y-0"
                 : "pointer-events-none invisible opacity-0 -translate-y-2"
