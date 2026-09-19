@@ -2,19 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import AnimatedSignature from "./AnimatedSignature";
 
-const TITLE = "ABDULLAH KHAN";
-const SCRAMBLE_CHARS = "01{}=>;#/<>[]()abcdefABCDEF";
-
-const DURATION = 1600;
-const EXIT_PAUSE = 300;
-
-// Deterministic stand-in for Math.random(): the loader is server-rendered, so a
-// truly random glyph would differ between the SSR markup and hydration.
-function scrambleGlyph(index: number, frame: number) {
-  const noise = Math.sin(index * 31.7 + frame * 12.9) * 10000;
-  return SCRAMBLE_CHARS[Math.floor((noise - Math.floor(noise)) * SCRAMBLE_CHARS.length)];
-}
+// Long enough for the signature to finish being written before the loader lifts.
+const DURATION = 2400;
+const EXIT_PAUSE = 400;
+const SIGNATURE_DELAY = 0.15;
+const SIGNATURE_DURATION = 2.2;
 
 export default function LoadingScreen() {
   // Default to visible so the very first paint (SSR + hydration) is the
@@ -22,7 +16,6 @@ export default function LoadingScreen() {
   // before the loading screen appears.
   const [visible, setVisible] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [frame, setFrame] = useState(0);
 
   // Show only once per session
   useEffect(() => {
@@ -44,7 +37,6 @@ export default function LoadingScreen() {
       const t = Math.min(1, (now - start) / DURATION);
       const eased = 1 - Math.pow(1 - t, 3);
       setProgress(Math.round(eased * 100));
-      setFrame((f) => f + 1);
       if (t < 1) {
         raf = requestAnimationFrame(tick);
       } else {
@@ -58,10 +50,6 @@ export default function LoadingScreen() {
       clearTimeout(done);
     };
   }, [visible]);
-
-  // Wordmark decodes left-to-right as the bar fills; the not-yet-resolved
-  // tail shows scrambling matrix glyphs
-  const resolvedCount = Math.floor((progress / 100) * TITLE.length);
 
   return (
     <AnimatePresence>
@@ -85,39 +73,10 @@ export default function LoadingScreen() {
             padding: "1rem",
           }}
         >
-          {/* Wordmark */}
-          <h1
-            aria-label={TITLE}
-            style={{
-              fontFamily: "var(--font-space-grotesk), monospace",
-              fontSize: "clamp(1.3rem, 4.5vw, 2.2rem)",
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              whiteSpace: "pre",
-              color: "#18181b",
-            }}
-          >
-            {TITLE.split("").map((char, i) => {
-              if (char === " ") return <span key={i}> </span>;
-              const isResolved = i < resolvedCount;
-              return (
-                <span
-                  key={i}
-                  style={
-                    isResolved
-                      ? undefined
-                      : {
-                          fontFamily: "monospace",
-                          color: "#059669",
-                          opacity: 0.75,
-                        }
-                  }
-                >
-                  {isResolved ? char : scrambleGlyph(i, frame)}
-                </span>
-              );
-            })}
-          </h1>
+          {/* Signature writes itself while the bar fills */}
+          <div style={{ width: "clamp(200px, 46vw, 300px)", color: "#18181b" }}>
+            <AnimatedSignature delay={SIGNATURE_DELAY} duration={SIGNATURE_DURATION} />
+          </div>
 
           {/* Loading bar */}
           <div style={{ width: "min(320px, 72vw)" }}>
